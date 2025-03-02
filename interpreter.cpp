@@ -23,7 +23,7 @@ void Interpreter::load_graph() {
     if (key != "digraph") {
         throw not_a_grath(filepath);
     }
-    Graph graph = std::move(GraphHandler::read_graph(name, std::move(is)));
+    Graph graph = GraphHandler::read_graph(name, std::move(is));
     std::cout << "Граф сохранён в ячейке номер "
               << gh.add_graph(std::move(graph)) << '\n';
 }
@@ -31,7 +31,7 @@ void Interpreter::load_graph() {
 Commands Interpreter::get_command() {
     std::string cmd = tokens[0];
     for (char &c : cmd) {
-        tolower(c);
+        c = tolower(c);
     }
     auto it = command_map.find(cmd);
     if (it != command_map.end()) {

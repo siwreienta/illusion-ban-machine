@@ -1,5 +1,5 @@
 #ifndef GRAPHHANDLER_HPP_
-#define GRAPHHANDER_HPP_
+#define GRAPHHANDLER_HPP_
 #include "apotheosis.hpp"
 #include "errors.hpp"
 

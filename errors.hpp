@@ -1,3 +1,5 @@
+#ifndef ERRORS_HPP_
+#define ERRORS_HPP_
 #include <exception>
 #include <iostream>
 #include <string>
@@ -38,3 +40,4 @@ struct is_not_register : std::runtime_error {
         : std::runtime_error("\'" + reg + "\' is not a register"){};
 };
 }  // namespace apotheosis
+#endif
