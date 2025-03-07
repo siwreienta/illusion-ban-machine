@@ -7,9 +7,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 include(default-options.cmake)
 
-add_executable(${PROJECT_NAME}_algorithm main.cpp graph-handler.cpp apotheosis.cpp interpreter.cpp)
+add_executable(${PROJECT_NAME}_algorithm algorithm/main.cpp algorithm/graph-handler.cpp algorithm/apotheosis.cpp algorithm/interpreter.cpp)
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/server/cmake")
 include(DownloadUserver)
 
 find_package(userver COMPONENTS core QUIET)
@@ -22,8 +22,8 @@ userver_setup_environment()
 
 # Common sources
 add_library(${PROJECT_NAME}_objs OBJECT
-    src/server.hpp
-    src/server.cpp
+    server/src/server.hpp
+    server/src/server.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::core)
@@ -35,13 +35,13 @@ pkg_check_modules(RE2 REQUIRED libre2)
 
 
 # The Service
-add_executable(${PROJECT_NAME}_server src/main.cpp)
+add_executable(${PROJECT_NAME}_server server/src/main.cpp)
 target_link_libraries(${PROJECT_NAME}_server PRIVATE ${PROJECT_NAME}_objs ${RE2_LIBRARIES} icuuc)
 
 
 # Unit Tests
 add_executable(${PROJECT_NAME}_unittest
-    src/server_test.cpp
+    server/src/server_test.cpp
 )
 target_link_libraries(${PROJECT_NAME}_unittest PRIVATE ${PROJECT_NAME}_objs userver::utest ${RE2_LIBRARIES} icuuc)
 add_google_tests(${PROJECT_NAME}_unittest)

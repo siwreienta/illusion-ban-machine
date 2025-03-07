@@ -69,4 +69,4 @@ components_manager:
       worker_threads: $worker-fs-threads
     main-task-processor:
       worker_threads: $worker-threads
-config_vars: ../configs/config_vars.yaml
+config_vars: ../server/configs/config_vars.yaml
