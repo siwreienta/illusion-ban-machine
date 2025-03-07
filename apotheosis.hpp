@@ -14,8 +14,8 @@ namespace apotheosis {
 
 class Graph {
 private:
-    [[maybe_unused]] int m_V;
-    [[maybe_unused]] int m_E;
+    int m_V;
+    int m_E;
     std::string m_name;
     std::vector<std::vector<int>> m_edges;
     std::unordered_map<std::string, std::vector<int>>

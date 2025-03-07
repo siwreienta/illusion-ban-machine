@@ -1,7 +1,3 @@
-CMakeCache.txt
-CMakeFiles/
-Makefile
-cmake_install.cmake
 *.sln
 *.vcxproj
 *.vcxproj.filters
@@ -38,3 +34,15 @@ cmake_install.cmake
 *.exe
 *.out
 *.app
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+build/
+
+# Test cache
+__pycache__
+.pytest_cache
+
