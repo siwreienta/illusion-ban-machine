@@ -1,18 +1,15 @@
 #include <iostream>
-#include <filesystem>
 #include "apotheosis.hpp"
-#include "graph-getter.hpp"
+#include "interpreter.hpp"
+
+
 
 int main(){
     std::cout<<"Я запустился!\n";
+    apotheosis::Interpreter interpreter;
 
-    // Хех
-
-    apotheosis::GraphGetter gg;
-    gg.privet();
-
-    throw apotheosis::myerror();
-
+    interpreter.start_interpreter();
+    
     std::cout<<"Я отработал!\n";
     return 0;
 }
