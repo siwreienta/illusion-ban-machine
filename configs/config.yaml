@@ -1,0 +1,72 @@
+components_manager:
+  components:
+    default-server-middleware-pipeline-builder:
+      append:
+      - testsuite-exceptions-handling-middleware
+    dns-client:
+      fs-task-processor: fs-task-processor
+    dynamic-config:
+      defaults:
+        HTTP_CLIENT_CONNECTION_POOL_SIZE: 1000
+    handler-load-code:
+      method: GET,POST
+      path: /load-code
+      task_processor: main-task-processor
+    handler-check-status:
+      method: GET
+      path: /check-status
+      task_processor: main-task-processor
+    handler-ping:
+      method: GET
+      path: /ping
+      task_processor: main-task-processor
+      throttling_enabled: false
+      url_trailing_slash: strict-match
+    http-client:
+      fs-task-processor: fs-task-processor
+      load-enabled: $is_testing
+      testsuite-allowed-url-prefixes:
+      - http://localhost:32823/
+      testsuite-enabled: true
+      testsuite-timeout: 10s
+    logging:
+      fs-task-processor: fs-task-processor
+      loggers:
+        default:
+          file_path: ../configs/service.log
+          format: tskv
+          level: debug
+          overflow_behavior: discard
+          testsuite-capture:
+            host: 127.0.0.1
+            port: 40451
+    server:
+      listener:
+        port: 8080
+        task_processor: main-task-processor
+    tests-control:
+      load-enabled: $is_testing
+      method: POST
+      path: /tests/{action}
+      skip-unregistered-testpoints: true
+      task_processor: main-task-processor
+      testpoint-url: http://localhost:32823/testpoint
+    testsuite-support:
+      testsuite-grpc-is-tls-enabled: false
+      testsuite-increased-timeout: 30s
+      testsuite-periodic-dumps-enabled: $userver-dumps-periodic
+      testsuite-periodic-update-enabled: false
+      testsuite-pg-execute-timeout: 35s
+      testsuite-pg-readonly-master-expected: true
+      testsuite-pg-statement-timeout: 30s
+      testsuite-redis-timeout-all: 30s
+      testsuite-redis-timeout-connect: 40s
+      testsuite-redis-timeout-single: 30s
+      testsuite-tasks-enabled: true
+  default_task_processor: main-task-processor
+  task_processors:
+    fs-task-processor:
+      worker_threads: $worker-fs-threads
+    main-task-processor:
+      worker_threads: $worker-threads
+config_vars: ../configs/config_vars.yaml
