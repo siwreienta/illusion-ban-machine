@@ -8,11 +8,12 @@
 ```
 mkdir build
 cd build
-cmake ..
+cmake -DBUILD_SERVER=<expr> -DBUILD_ALGORITHM=<expr> ..
 make
 ```
 
-Будет создано несколько исполняемых файлов, среди которых ```apotheosis_server``` и ```apotheosis_algorithm```.
+Здесь ```<expr>``` может принимать два значения - ```ON/OFF``` (проводить сборку или нет), первый флаг отвечает за сборку сервера, второй - за сборку алгоритма. По умолчанию (то есть без флагов) будут собраны оба исполняемых фалйла - ```apotheosis_server``` и ```apotheosis_algorithm```.
+
 Для запуска сервера (из директории build/):
 ```
 ./apotheosis_server --config ../server/configs/config.yaml
