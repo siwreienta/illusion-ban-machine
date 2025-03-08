@@ -19,7 +19,7 @@ jobs:
         python3 -m pip install -r requirements.txt
     
     - name : Install re2 from source
-      run |
+      run: |
         sudo apt install -y git build-essential cmake
         git clone https://github.com/google/re2.git
         cd re2
