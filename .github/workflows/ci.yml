@@ -15,7 +15,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake g++ libssl-dev libboost-all-dev libyaml-cpp-dev libjemalloc-dev
+        sudo apt-get install -y cmake g++ libssl-dev libboost-all-dev libyaml-cpp-dev libjemalloc-dev libnghttp2-dev
 
     - name: Cache build directory
       id: cache-build
