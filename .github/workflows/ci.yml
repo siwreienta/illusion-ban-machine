@@ -17,7 +17,7 @@ jobs:
         DEPS_FILE="https://raw.githubusercontent.com/userver-framework/userver/refs/heads/develop/scripts/docs/en/deps/${{matrix.os}}.md"
         sudo apt update
         sudo apt install --allow-downgrades -y $(wget -q -O - ${DEPS_FILE})
-        sudo apt install -y libboost-all-dev
+        sudo apt install -y libboost-all-dev libyaml-cpp-dev libjemalloc-dev libnghttp2-dev libev-dev
         python3 -m pip install -r requirements.txt
 
     - name: Cache build directory
