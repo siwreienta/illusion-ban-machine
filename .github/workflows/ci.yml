@@ -14,11 +14,17 @@ jobs:
 
     - name: Install dependencies
       run: |
-        DEPS_FILE="https://raw.githubusercontent.com/userver-framework/userver/refs/heads/develop/scripts/docs/en/deps/${{matrix.os}}.md"
         sudo apt update
-        sudo apt install --allow-downgrades -y $(wget -q -O - ${DEPS_FILE})
-        sudo apt install -y libboost-all-dev libyaml-cpp-dev libjemalloc-dev libnghttp2-dev libev-dev libre2-dev
+        sudo apt-get install -y cmake g++ libssl-dev libboost-all-dev libyaml-cpp-dev libjemalloc-dev libnghttp2-dev libev-dev libre2-dev
         python3 -m pip install -r requirements.txt
+    
+    - name : Install re2 from source
+      run |
+        sudo apt install -y git build-essential cmake
+        git clone https://github.com/google/re2.git
+        cd re2
+        make
+        sudo make install
 
     - name: Cache build directory
       id: cache-build
