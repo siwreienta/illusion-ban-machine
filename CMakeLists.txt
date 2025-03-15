@@ -5,13 +5,13 @@ project(apotheosis CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-option(BUILD_SERVER "Build the server target" ON)
+option(BUILD_SERVER "Build the server target" OFF)
 option(BUILD_ALGORITHM "Build the algorithm target" ON)
 
 include(default-options.cmake)
 
 if (BUILD_ALGORITHM)
-    add_executable(${PROJECT_NAME}_algorithm algorithm/main.cpp algorithm/graph-handler.cpp algorithm/apotheosis.cpp algorithm/interpreter.cpp)
+    add_executable(${PROJECT_NAME}_algorithm algorithm/main.cpp algorithm/graph-handler.cpp algorithm/apotheosis.cpp algorithm/interpreter.cpp algorithm/VF2.cpp)
 endif()
 
 if (BUILD_SERVER)
