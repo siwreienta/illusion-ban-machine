@@ -1,10 +1,10 @@
-#include <iostream>
 #include <filesystem>
+#include <iostream>
 #include "apotheosis.hpp"
 #include "graph-getter.hpp"
 
-int main(){
-    std::cout<<"Я запустился!\n";
+int main() {
+    std::cout << "Я запустился!\n";
 
     // Хех
 
@@ -13,6 +13,6 @@ int main(){
 
     throw apotheosis::myerror();
 
-    std::cout<<"Я отработал!\n";
+    std::cout << "Я отработал!\n";
     return 0;
 }
