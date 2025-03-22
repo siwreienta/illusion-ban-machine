@@ -30,10 +30,9 @@ public:
     using HttpHandlerBase::HttpHandlerBase;
 
     std::string
-    HandleRequestThrow(const userver::server::http::HttpRequest &request, userver::server::request::RequestContext &)
+    HandleRequestThrow(const userver::server::http::HttpRequest &, userver::server::request::RequestContext &)
         const override {
-        const auto code = request.GetArg("code");
-        return apotheosis::LoadCodes(code);
+        return apotheosis::LoadCodes();
     }
 };
 
@@ -50,10 +49,7 @@ std::string CheckStatus(std::string_view id) {
     );
 }
 
-std::string LoadCodes(std::string_view code) {
-    if (code.empty()) {
-        return "Error: The code itself is missing = banned :)\n";
-    }
+std::string LoadCodes() {
     try {
         graph_maker::joern_graph_maker test1;
         graph_maker::files_stack fs1("../joern_parse/test_files");
