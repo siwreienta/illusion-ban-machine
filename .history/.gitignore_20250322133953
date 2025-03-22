@@ -32,9 +32,8 @@
 *.app
 
 
-workspace/
-workspace/*
-.vscode/*
-.vscode/
-.history/
-.history/*
+/workspace/
+/workspace/*
+*.bin
+.vscode/settings.json
+test_main*

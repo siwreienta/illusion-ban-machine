@@ -36,5 +36,3 @@ workspace/
 workspace/*
 .vscode/*
 .vscode/
-.history/
-.history/*

@@ -34,7 +34,6 @@
 
 workspace/
 workspace/*
-.vscode/*
+*.bin
 .vscode/
-.history/
-.history/*
+test_main*
