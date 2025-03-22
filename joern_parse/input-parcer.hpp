@@ -44,7 +44,7 @@ public:
 
     void create_dot_file(
         const std::string &file,
-        const std::string &dir,
+        // const std::string &dir,
         const std::string &id
     );
 

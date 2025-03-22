@@ -45,20 +45,20 @@ const std::string &files_stack::get_file_path(int number) {
 
 void joern_graph_maker::create_dot_file(
     const std::string &file,
-    const std::string &dir,
+    // const std::string &dir,
     const std::string &id
 ) {
     std::filesystem::path path_to_file(file);
     std::string command =
-        "joern-export --repr=pdg --format=dot --out ./results/" + id;
+        "joern-export --repr=pdg --format=dot --out ../joern_parse/results/" + id;
     int result = std::system(command.c_str());
     if (result != 0) {
         throw parcerer_errors("Ошибка при создании .dot для файла: " + file);
     }
     const std::string path_to_dot_folder =
-        "./results/" + id;
+        "../joern_parse/results/" + id;
     const std::string path_to_customized_file =
-        "./results/" + id + "/output.dot";
+        "../joern_parse/results/" + id + "/output.dot";
     customize_graph(path_to_dot_folder, path_to_customized_file);
 }
 
@@ -99,7 +99,7 @@ void joern_graph_maker::customize_graph(
     for (long long i = 0; i < number; i++) {
         customized_file << i << " " << vertexes[i] << "\n";
     }
-    for (long long i = 0; i < edges.size(); i++) {
+    for (long long i = 0; i < static_cast<long long>(edges.size()); i++) {
         customized_file << edges[i].first << " " << edges[i].second << "\n";
     }
     customized_file.close();
@@ -117,7 +117,7 @@ bool joern_graph_maker::parsing_dot_file(
         throw std::runtime_error("Ошибка при открытии файла: " + input_file);
     }
     bool is_main = false;
-    bool not_ended = false;
+    // bool not_ended = false;
     long long id;
     std::string line;
     std::getline(dot_file, line);
@@ -148,7 +148,7 @@ bool joern_graph_maker::parsing_dot_file(
 
 
 std::string joern_graph_maker::get_result_file_path(const std::string id) {
-    return "./joern_parse/results/" + id + "/output.dot";
+    return "../joern_parse/results/" + id + "/output.dot";
 }
 
 void joern_graph_maker::make_graph(files_stack &stack) {
@@ -165,7 +165,7 @@ void joern_graph_maker::make_graph(files_stack &stack) {
         }
         std::filesystem::path id_path(stack.get_file_path(i));
         const std::string id = id_path.filename();
-        create_dot_file(stack.get_file_path(i), result_folder, id);
+        create_dot_file(stack.get_file_path(i), id);
     }
 }
 
