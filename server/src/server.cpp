@@ -1,6 +1,7 @@
 #include "server.hpp"
 #include <fmt/format.h>
 #include <userver/server/handlers/http_handler_base.hpp>
+#include "../../joern_parse/input-parcer.hpp"
 
 namespace apotheosis {
 
@@ -29,10 +30,9 @@ public:
     using HttpHandlerBase::HttpHandlerBase;
 
     std::string
-    HandleRequestThrow(const userver::server::http::HttpRequest &request, userver::server::request::RequestContext &)
+    HandleRequestThrow(const userver::server::http::HttpRequest &, userver::server::request::RequestContext &)
         const override {
-        const auto code = request.GetArg("code");
-        return apotheosis::LoadCodes(code);
+        return apotheosis::LoadCodes();
     }
 };
 
@@ -49,13 +49,17 @@ std::string CheckStatus(std::string_view id) {
     );
 }
 
-std::string LoadCodes(std::string_view code) {
-    if (code.empty()) {
-        return "Error: The code itself is missing = banned :)\n";
+std::string LoadCodes() {
+    try {
+        graph_maker::joern_graph_maker test1;
+        graph_maker::files_stack fs1("../joern_parse/test_files");
+        test1.make_graph(fs1);
+        std::cout << test1.get_result_file_path("1") << std::endl;
+        test1.clear_directory("../joern_parse/results");
+        return "We just received the codes, it's completely plagiarized.\n";
+    } catch (graph_maker::parcerer_errors &e) {
+        return (e.what());
     }
-    return fmt::format(
-        "We just received the code '{}', it's completely plagiarized.\n", code
-    );
 }
 
 void AppendCheckStatus(userver::components::ComponentList &component_list) {

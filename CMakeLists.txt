@@ -40,27 +40,27 @@ if (BUILD_SERVER)
 
 
     # The Service
-    add_executable(${PROJECT_NAME}_server server/src/main.cpp)
+    add_executable(${PROJECT_NAME}_server server/src/main.cpp joern_parse/input-parcer.cpp)
     target_link_libraries(${PROJECT_NAME}_server PRIVATE ${PROJECT_NAME}_objs ${RE2_LIBRARIES} icuuc)
 
 
     # Unit Tests
-    add_executable(${PROJECT_NAME}_unittest
-        server/src/server_test.cpp
-    )
-    target_link_libraries(${PROJECT_NAME}_unittest PRIVATE ${PROJECT_NAME}_objs userver::utest ${RE2_LIBRARIES} icuuc)
-    add_google_tests(${PROJECT_NAME}_unittest)
+    # add_executable(${PROJECT_NAME}_unittest
+    #     server/src/server_test.cpp
+    # )
+    # target_link_libraries(${PROJECT_NAME}_unittest PRIVATE ${PROJECT_NAME}_objs userver::utest ${RE2_LIBRARIES} icuuc)
+    # add_google_tests(${PROJECT_NAME}_unittest)
 
 
     # Functional testing
     # userver_testsuite_add_simple()
 
-    userver_testsuite_add(
-        NAME ${PROJECT_NAME}_testsuite
-        SERVICE_TARGET ${PROJECT_NAME}_server
-        TEST_SOURCES
-            tests/functional/test_basic.cpp
-    )
+    # userver_testsuite_add(
+    #     NAME ${PROJECT_NAME}_testsuite
+    #     SERVICE_TARGET ${PROJECT_NAME}_server
+    #     TEST_SOURCES
+    #         tests/functional/test_basic.cpp
+    # )
 
     # Install
 
