@@ -1,0 +1,55 @@
+*.sln
+*.vcxproj
+*.vcxproj.filters
+
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+build/
+
+# Test cache
+__pycache__
+.pytest_cache
+
+
+workspace/
+workspace/*
+.vscode/*
+.vscode/
+.history/
+.history/*
