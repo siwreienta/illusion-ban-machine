@@ -32,8 +32,7 @@
 *.app
 
 
-/workspace/
-/workspace/*
-cpg.bin
-.vscode/settings.json
-test_main*
+workspace/
+workspace/*
+.vscode/*
+.vscode/
