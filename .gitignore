@@ -46,3 +46,10 @@ build/
 __pycache__
 .pytest_cache
 
+workspace/
+workspace/*
+.vscode/*
+.vscode/
+.history/
+.history/*
+
