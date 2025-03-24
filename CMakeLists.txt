@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 option(BUILD_SERVER "Build the server target" OFF)
-option(BUILD_ALGORITHM "Build the algorithm target" ON)
+option(BUILD_ALGORITHM "Build the algorithm target" OFF)
 
 include(default-options.cmake)
 

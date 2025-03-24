@@ -1,40 +1,50 @@
 #include <iostream>
+#include "VF2.hpp"
 #include "apotheosis.hpp"
 #include "interpreter.hpp"
-#include "VF2.hpp"
 
+int main() {
+    std::cout << "Я запустился!\n";
+    apotheosis::Graph g("Графичек ^_^");
 
+    g.add_vertex("Тип 0");
+    g.add_vertex("Тип 1");
+    g.add_vertex("Тип 2");
+    g.add_vertex("Тип 3");
+    g.add_vertex("Тип 4");
+    g.add_vertex("Тип 5");
+    g.add_vertex("Тип 6");
+    g.add_vertex("Тип 1");
+    g.add_vertex("Тип 3");
 
+    // 0 1 2 3
+    // 4 5 8 6
+    g.add_edge(0, 1);
+    g.add_edge(1, 0);
+    g.add_edge(1, 2);
+    g.add_edge(2, 3);
+    g.add_edge(1, 3);
+    g.add_edge(4, 5);
+    g.add_edge(5, 8);
+    g.add_edge(7, 8);
+    g.add_edge(8, 6);
+    g.add_edge(6, 5);
+    g.add_edge(5, 5);
+    g.add_edge(5, 5);
+    g.add_edge(5, 1);
+    g.add_edge(1, 7);
+    g.add_edge(7, 4);
+    g.add_edge(3, 4);
+    g.add_edge(5, 6);
+    g.add_edge(6, 7);
+    g.add_edge(7, 8);
 
-int main(){
-    std::cout<<"Я запустился!\n";
-    // apotheosis::Interpreter interpreter;
+    std::vector<apotheosis::Subgraph> dev = g.devide_into_subgraphs();
+    std::cout << "Я поделил\n";
+    std::cout << dev.size() << std::endl;
+    apotheosis::VF2 algo(dev, g);
+    std::cout << algo.check() << '\n';
 
-    // interpreter.start_interpreter();
-
-    apotheosis::Subgraph l("Левый");
-    apotheosis::Graph r("Правый");
-    int n,m;
-    std::cin>>n>>m;
-    
-    for (int i=0;i<n;i++){
-        std::string type;
-        std::cin>>type;
-        l.add_vertex(type);
-        r.add_vertex(type);
-    }
-    for (int i=0;i<m;i++){
-        int a,b;
-        std::cin>>a>>b;
-        l.add_edge(a,b);
-        r.add_edge(a,b);
-    }
-    
-    std::vector<apotheosis::Subgraph> loh{l};
-    apotheosis::VF2 algo(loh,r); 
-    std::cout<<algo.check()<<'\n';
-
-    
-    std::cout<<"Я отработал!\n";
+    std::cout << "Я отработал!\n";
     return 0;
 }
