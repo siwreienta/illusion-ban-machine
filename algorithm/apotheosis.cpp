@@ -95,7 +95,6 @@ void Graph::make_subgraphs_and_put_into_vector(
     int size = close_vertexes.size();
     int depth = DEPTH_OF_DEVISION;
 
-    std::sort(close_vertexes.begin(), close_vertexes.end());
     // 7 форов, для DEPTH_OF_DIVISION = 7
     // Вполне естественно, что это надо поменять после MVP
     for (int i1 = 0; i1 < size - depth + 1; i1++) {
