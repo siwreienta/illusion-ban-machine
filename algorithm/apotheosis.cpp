@@ -50,8 +50,8 @@ std::vector<int> Graph::bfs(int root) {
     return result;
 }
 
-Subgraph Graph::make_subgraph(std::vector<int> vertexes, int number) {
-    Subgraph result(this->m_name + "_subgraph" + std::to_string(number));
+Subgraph Graph::make_subgraph(const std::vector<int> vertexes, int number) {
+    Subgraph result(this->m_name + "_subgraph_" + std::to_string(number));
     for (auto v : vertexes) {
         result.add_vertex(vertex_table[v]);
     }
@@ -89,11 +89,12 @@ bool check_svyaznost(Subgraph &subgraph) {
 
 void Graph::make_subgraphs_and_put_into_vector(
     int root,
-    std::vector<Subgraph> &subgraphs
+    std::set<std::vector<int>> &est_li
 ) {
     std::vector<int> close_vertexes = bfs(root);
     int size = close_vertexes.size();
     int depth = DEPTH_OF_DEVISION;
+    sort(close_vertexes.begin(), close_vertexes.end());
 
     // 7 форов, для DEPTH_OF_DIVISION = 7
     // Вполне естественно, что это надо поменять после MVP
@@ -104,16 +105,21 @@ void Graph::make_subgraphs_and_put_into_vector(
                     for (int i5 = i4 + 1; i5 < size - depth + 5; i5++) {
                         for (int i6 = i5 + 1; i6 < size - depth + 6; i6++) {
                             for (int i7 = i6 + 1; i7 < size - depth + 7; i7++) {
-                                std::vector<int> vertexes = {
+                                const std::vector<int> vertexes = {
                                     close_vertexes[i1], close_vertexes[i2],
                                     close_vertexes[i3], close_vertexes[i4],
                                     close_vertexes[i5], close_vertexes[i6],
                                     close_vertexes[i7]};
-                                Subgraph maybe_subgraph =
-                                    make_subgraph(vertexes, subgraphs.size());
-                                if (check_svyaznost(maybe_subgraph)) {
-                                    subgraphs.push_back(std::move(maybe_subgraph
-                                    ));
+                                if (!est_li.contains(vertexes)) {
+                                    est_li.insert(vertexes);
+                                    Subgraph maybe_subgraph = make_subgraph(
+                                        vertexes, m_subgraphs.size()
+                                    );
+                                    if (check_svyaznost(maybe_subgraph)) {
+                                        m_subgraphs.push_back(
+                                            std::move(maybe_subgraph)
+                                        );
+                                    }
                                 }
                             }
                         }
@@ -125,11 +131,13 @@ void Graph::make_subgraphs_and_put_into_vector(
 }
 
 std::vector<Subgraph> Graph::devide_into_subgraphs() {
-    std::vector<Subgraph> subgraphs;
-    for (int v = 0; v < m_V; v++) {
-        make_subgraphs_and_put_into_vector(v, subgraphs);
+    if (m_subgraphs.empty()) {
+        std::set<std::vector<int>> est_li;
+        for (int root = 0; root < m_V; root++) {
+            make_subgraphs_and_put_into_vector(root, est_li);
+        }
     }
-    return subgraphs;
+    return m_subgraphs;
 }
 
 void Graph::add_edge(int v1, int v2) {

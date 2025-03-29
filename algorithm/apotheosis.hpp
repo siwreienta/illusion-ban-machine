@@ -33,10 +33,12 @@ public:
     std::unordered_map<std::string, std::vector<int>> vertex_map;
     std::vector<std::string> vertex_table;
 
+    std::vector<Subgraph> m_subgraphs;
+
     std::vector<int> bfs(int root);
     void make_subgraphs_and_put_into_vector(
         int root,
-        std::vector<Subgraph> &subgraphs
+        std::set<std::vector<int>> &est_li
     );
 
     Subgraph make_subgraph(std::vector<int> vertexes, int number);
