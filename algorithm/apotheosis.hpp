@@ -17,7 +17,17 @@
 
 namespace apotheosis {
 
-const int DEPTH_OF_DEVISION = 7;
+const int DEPTH_OF_DEVISION = 5;
+
+template <class T>
+void print_vec(std::vector<T> &vec) {
+    for (T i : vec) {
+        std::cout << i << " ";
+    }
+    std::cout << std::endl;
+}
+
+std::string tolower_ru(const std::string &utf8_str);
 
 class Subgraph;
 
@@ -34,6 +44,8 @@ public:
     std::vector<std::string> vertex_table;
 
     std::vector<Subgraph> m_subgraphs;
+
+    std::set<int> m_roots;
 
     std::vector<int> bfs(int root);
     void make_subgraphs_and_put_into_vector(

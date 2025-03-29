@@ -10,12 +10,18 @@ void GraphHandler::privet() {
     std::cout << "Привет, сокомандники!\nZZZZZ\n";
 }
 
-int GraphHandler::add_graph(Graph graph) {
+void GraphHandler::add_graph(Graph graph) {
     graphs.push_back(graph);
-    return static_cast<int>(graphs.size());
 }
 
-Graph GraphHandler::read_graph(std::string &name, std::ifstream is) {
+long double GraphHandler::check(int first_number, int second_number) {
+    std::vector<Subgraph> subgraphs =
+        graphs[first_number].devide_into_subgraphs();
+    VF2 vf2(subgraphs, graphs[second_number]);
+    return vf2.check();
+}
+
+Graph GraphHandler::read_graph(std::string &name, std::ifstream &is) {
     Graph graph(name);
 
     // Подразумеваю, что вершины будут хорошо переименованы, пока нет нужна мапа
@@ -23,7 +29,7 @@ Graph GraphHandler::read_graph(std::string &name, std::ifstream is) {
 
     int V = 0;  // Количество вершин
     int E = 0;  // Количество ребер
-    if (!is >> V >> E) {
+    if (!(is >> V >> E)) {
         throw bad_read();
     }
 
@@ -50,7 +56,6 @@ Graph GraphHandler::read_graph(std::string &name, std::ifstream is) {
         int v2 = vertex_map[vertex_2_name];
         graph.add_edge(v1, v2);
     }
-
     return graph;
 }
 

@@ -5,6 +5,15 @@
 
 int main() {
     std::cout << "Я запустился!\n";
+    // std::cout<< "Ручной ввод:\n";
+    // apotheosis::Interpreter interpreter;
+    // interpreter.start_interpreter();
+
+    // std::cout<< "Чек a и b: "<< apotheosis::check_two_graphs("a.dot",
+    // "b.dot")<<'\n';
+    std::cout << "Чек 0 и 1: " << apotheosis::check_two_graphs("0.dot", "1.dot")
+              << '\n';
+
     apotheosis::Graph g("Графичек ^_^");
 
     g.add_vertex("Тип 0");
@@ -39,8 +48,13 @@ int main() {
     g.add_edge(6, 7);
     g.add_edge(7, 8);
 
-    std::vector<apotheosis::Subgraph> dev = g.devide_into_subgraphs();
-    std::cout << "Я поделил\n";
+    apotheosis::Graph g2 = g;
+    g2.add_vertex("Тип 10");
+    g2.add_edge(9, 1);
+    g2.add_edge(3, 9);
+
+    std::vector<apotheosis::Subgraph> dev = g2.devide_into_subgraphs();
+    std::cout << "Я поделил:\n";
     std::cout << dev.size() << std::endl;
     apotheosis::VF2 algo(dev, g);
     std::cout << algo.check() << '\n';

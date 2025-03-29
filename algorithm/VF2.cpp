@@ -82,6 +82,10 @@ long double VF2::check() {
             founded++;
         }
     }
+    std::cout << founded << " " << m_subgraphs.size() << std::endl;
+    if (m_subgraphs.size() == 0) {
+        return -1;
+    }
     return static_cast<long double>(founded) / m_subgraphs.size();
 }
 }  // namespace apotheosis
