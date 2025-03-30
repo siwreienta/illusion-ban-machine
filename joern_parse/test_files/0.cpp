@@ -1,46 +1,51 @@
 #include <iostream>
 #include <vector>
-#include <set>
-#include <unordered_map>
+#include <algorithm>
+#include <iomanip>
 
 using namespace std;
 
-int n;
-
-
-int main(){
-    cin >> n;
-    int mas[n + 1];
-    mas[1] = 0;
-    for(int i = 2; i <= n; i ++){
-        mas[i] = mas[i - 1] + 1;
-        if (i % 2 == 0) mas[i] = min(mas[i], mas[i / 2] + 1);
-        if(i % 3 == 0) mas[i] = min(mas[i], mas[i / 3] + 1);
-    }
-    cout << mas[n] << "\n";
-    int mm[mas[n] + 1];
-    int j = mas[n] - 1;
-    mm[j + 1] = n;
-    for(int i = n; i > 1 && j >= 0; ){
-        if(i % 3 == 0 && mas[i] == mas[i / 3] + 1){
-            mm[j] = i / 3;
-            i = i  / 3;
-        }
-        else{
-            if(i % 2 == 0 && mas[i] == mas[i / 2] + 1){
-                mm[j] = i / 2;
-                i = i / 2;
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int N, W;
+    cin >> N >> W;
+    
+    vector<pair<int, int>> boxes;
+    double total_value = 0.0;
+    
+    for (int i = 0; i < N; ++i) {
+        int v, w;
+        cin >> v >> w;
+        if (w == 0) {
+            if (v > 0) {
+                total_value += v;
             }
-            else{
-                mm[j] = i - 1;
-                i = i - 1;
-            }
+            continue;
         }
-        j--;
-
+        boxes.emplace_back(v, w);
     }
-    for(int i = 0; i < mas[n] + 1; i++){
-        cout << mm[i] << " ";
+    
+    sort(boxes.begin(), boxes.end(), [](const pair<int, int>& a, const pair<int, int>& b) {
+        return (long long)a.first * b.second > (long long)b.first * a.second;
+    });
+    
+    int remaining = W;
+    for (auto& box : boxes) {
+        if (remaining <= 0) break;
+        int v = box.first;
+        int w = box.second;
+        if (w <= remaining) {
+            total_value += v;
+            remaining -= w;
+        } else {
+            total_value += static_cast<double>(v) * remaining / w;
+            remaining = 0;
+        }
     }
+    
+    cout << fixed << setprecision(3) << total_value << endl;
+    
     return 0;
 }

@@ -8,6 +8,7 @@
 #include <map>
 #include <unordered_map>
 #include <vector>
+#include <functional>
 
 namespace graph_maker {
 
@@ -49,6 +50,7 @@ public:
     );
 
     void make_graph(files_stack &stack);
+    // void make_graph(files_stack &stack, std::function<void(std::string)> callback);
 
     std::string get_result_file_path(const std::string id);
 

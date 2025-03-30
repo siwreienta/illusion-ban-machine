@@ -1,7 +1,9 @@
 #include "server.hpp"
 #include <fmt/format.h>
 #include <userver/server/handlers/http_handler_base.hpp>
+#include <userver/server/http/http_response_body_stream.hpp>
 #include "../../joern_parse/input-parcer.hpp"
+#include <functional>
 
 namespace apotheosis {
 
@@ -18,6 +20,8 @@ public:
     HandleRequestThrow(const userver::server::http::HttpRequest &request, userver::server::request::RequestContext &)
         const override {
         const auto task_id = request.GetArg("task_id");
+        auto& response = request.GetHttpResponse();
+        response.SetContentType("text/html");
         return apotheosis::CheckStatus(task_id);
     }
 };
@@ -30,9 +34,11 @@ public:
     using HttpHandlerBase::HttpHandlerBase;
 
     std::string
-    HandleRequestThrow(const userver::server::http::HttpRequest &, userver::server::request::RequestContext &)
+    HandleRequestThrow(const userver::server::http::HttpRequest &request, userver::server::request::RequestContext &)
         const override {
-        return apotheosis::LoadCodes();
+        auto& response = request.GetHttpResponse();
+        response.SetContentType("text/html");
+        return fmt::format("<html><body><h1>{}</h1></body></html>", apotheosis::LoadCodes());
     }
 };
 
@@ -40,23 +46,23 @@ public:
 
 std::string CheckStatus(std::string_view id) {
     if (id.empty()) {
-        return "Error: No solution ID = banned :)\n";
+        return "<html><body><h1>Error: No solution ID = banned :)</h1></body></html>";
     }
     return fmt::format(
-        "Everything is fine, your request for a solution {} has been accepted, "
-        "just wait a couple of months.\n",
+        "<html><body><h1>Everything is fine, your request for a solution {} has been accepted, "
+        "just wait a couple of months</h1></body></html>",
         id
     );
 }
 
 std::string LoadCodes() {
     try {
-        graph_maker::joern_graph_maker test1;
-        graph_maker::files_stack fs1("../joern_parse/test_files");
-        test1.make_graph(fs1);
-        std::cout << test1.get_result_file_path("1") << std::endl;
-        test1.clear_directory("../joern_parse/results");
-        return "We just received the codes, it's completely plagiarized.\n";
+        graph_maker::joern_graph_maker joern_parser;
+        graph_maker::files_stack file_stack("../joern_parse/test_files");
+        joern_parser.make_graph(file_stack);
+        // std::cout << joern_parser.get_result_file_path("1") << std::endl;
+        joern_parser.clear_directory("../joern_parse/results");
+        return "We just received the codes, it's completely plagiarized.";
     } catch (graph_maker::parcerer_errors &e) {
         return (e.what());
     }
