@@ -82,7 +82,6 @@ long double VF2::check() {
             founded++;
         }
     }
-    std::cout << founded << " " << m_subgraphs.size() << std::endl;
     if (m_subgraphs.size() == 0) {
         return -1;
     }
