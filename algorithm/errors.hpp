@@ -11,6 +11,16 @@ struct not_a_grath : std::runtime_error {
         : std::runtime_error("\"" + filepath + "\"" + " - это не граф!"){};
 };
 
+struct too_big_number : std::runtime_error {
+    too_big_number(int number, int size)
+        : std::runtime_error(
+              "Ячейки с номером " + std::to_string(number) +
+              " не существует (слишком большое число)\nТекущее количество "
+              "ячеек - " +
+              std::to_string(size)
+          ){};
+};
+
 struct unable_to_open : std::runtime_error {
     explicit unable_to_open(const std::string &fname)
         : std::runtime_error("Unable to open file \'" + fname + "\'"){};
