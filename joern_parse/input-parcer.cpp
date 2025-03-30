@@ -50,15 +50,15 @@ void joern_graph_maker::create_dot_file(
 ) {
     std::filesystem::path path_to_file(file);
     std::string command =
-        "joern-export --repr=pdg --format=dot --out ./joern_work_folder/results/" + id;
+        "joern-export --repr=pdg --format=dot --out ../joern_work_folder/results/" + id;
     int result = std::system(command.c_str());
     if (result != 0) {
         throw parcerer_errors("Ошибка при создании .dot для файла: " + file);
     }
     const std::string path_to_dot_folder =
-        "./joern_work_folder/results/" + id;
+        "../joern_work_folder/results/" + id;
     const std::string path_to_customized_file =
-        "./joern_work_folder/results/" + id + "/output.dot";
+        "../joern_work_folder/results/" + id + "/output.dot";
     customize_graph(path_to_dot_folder, path_to_customized_file);
 }
 
@@ -157,7 +157,7 @@ bool joern_graph_maker::parsing_dot_file(
 
 
 std::string joern_graph_maker::get_result_file_path(const std::string id) {
-    return "./joern_work_folder/results/" + id + "/output.dot";
+    return "../joern_work_folder/results/" + id + "/output.dot";
 }
 
 void joern_graph_maker::make_graph(files_stack &stack) {

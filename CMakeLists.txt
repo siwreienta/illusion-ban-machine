@@ -40,7 +40,7 @@ if (BUILD_SERVER)
 
 
     # The Service
-    add_executable(${PROJECT_NAME}_server server/src/main.cpp joern_parse/input-parcer.cpp)
+    add_executable(${PROJECT_NAME}_server server/src/main.cpp joern_parse/input-parcer.cpp algorithm/graph-handler.cpp algorithm/apotheosis.cpp algorithm/interpreter.cpp algorithm/VF2.cpp)
     target_link_libraries(${PROJECT_NAME}_server PRIVATE ${PROJECT_NAME}_objs ${RE2_LIBRARIES} icuuc)
 
 

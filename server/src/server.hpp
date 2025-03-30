@@ -7,7 +7,7 @@
 
 namespace apotheosis {
 
-std::string CheckStatus(std::string_view id);
+std::string CheckStatus();
 std::string LoadCodes();
 
 void AppendCheckStatus(userver::components::ComponentList &component_list);
