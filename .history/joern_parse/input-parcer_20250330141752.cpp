@@ -46,20 +46,19 @@ const std::string &files_stack::get_file_path(int number) {
 void joern_graph_maker::create_dot_file(
     const std::string &file,
     const std::string &dir,
-    int number_of_file
+    const std::string &id
 ) {
     std::filesystem::path path_to_file(file);
     std::string command =
-        "joern-export --repr=pdg --format=dot --out ./results/" +
-        std::to_string(number_of_file);
+        "joern-export --repr=pdg --format=dot --out ./joern_work_folder/results/" + id;
     int result = std::system(command.c_str());
     if (result != 0) {
         throw parcerer_errors("Ошибка при создании .dot для файла: " + file);
     }
     const std::string path_to_dot_folder =
-        "./results/" + std::to_string(number_of_file);
+        "./joern_work_folder/results/" + id;
     const std::string path_to_customized_file =
-        "./results/" + std::to_string(number_of_file) + "/output.dot";
+        "./joern_work_folder/results/" + id + "/output.dot";
     customize_graph(path_to_dot_folder, path_to_customized_file);
 }
 
@@ -67,13 +66,6 @@ void joern_graph_maker::customize_graph(
     const std::string &input_folder,
     const std::string &output_file
 ) {
-    std::ofstream customized_file(output_file);
-    if (!customized_file.is_open()) {
-        throw std::runtime_error(
-            "Ошибка при открытии и создании файла: " + output_file
-        );
-    }
-    customized_file << "digraph " << input_folder << "\n";
     std::unordered_map<long long, long long> id_to_number;
     std::map<long long, std::string> vertexes;
     std::vector<std::pair<long long, long long>> edges;
@@ -84,10 +76,15 @@ void joern_graph_maker::customize_graph(
     for (const auto& file: std::filesystem::directory_iterator(input_folder)) {
         if (std::filesystem::is_regular_file(file.path())) {
             files.push_back(file.path());
+            std::cout << file.path().string()<< std::endl;
         }
     }
     std::sort(files.begin(), files.end(), [](const std::filesystem::path& a, const std::filesystem::path& b) {
-        return a.filename().string() < b.filename().string();
+        std::string a_str = a.filename().string();
+        std::string b_str = b.filename().string();
+        int first_number = stoi(a_str.substr(0, a_str.find("-")));
+        int second_number = stoi(b_str.substr(0, b_str.find("-")));
+        return first_number < second_number;
     });
 
     for (const auto &element: files) {
@@ -96,6 +93,13 @@ void joern_graph_maker::customize_graph(
             );
             if (was_main) break;
     }
+    std::ofstream customized_file(output_file);
+    if (!customized_file.is_open()) {
+        throw std::runtime_error(
+            "Ошибка при открытии и создании файла: " + output_file
+        );
+    }
+    customized_file << "digraph " << input_folder << "\n";
     customized_file << number << " " << edges.size() << "\n";
     for (long long i = 0; i < number; i++) {
         customized_file << i << " " << vertexes[i] << "\n";
@@ -117,24 +121,28 @@ bool joern_graph_maker::parsing_dot_file(
     if (!dot_file.is_open()) {
         throw std::runtime_error("Ошибка при открытии файла: " + input_file);
     }
+    std::cout << input_file << std::endl;
     bool is_main = false;
-    bool not_ended = false;
     long long id;
     std::string line;
     std::getline(dot_file, line);
     if (line.find("main") != std::string::npos) {
         is_main = true;
     }
-    while (std::getline(dot_file, line)) {
+    while (std::getline(dot_file, line)) { 
         if (line.find(" -> ") == std::string::npos) {
             if (line.find('"') == 0) {
                 id = stoll(line.substr(1, line.find('"', 1) - 1));
                 id_to_number[id] = number;
                 int pos_inc = line.find("<") + 1;
-                int pos_comma = line.find(",", pos_inc);
+                int pos_comma = pos_inc;
+                if(line.find(",", pos_inc) == std::string::npos){
+                    pos_comma = line.find("]", pos_inc);
+                }
+                else{
+                    pos_comma = line.find(",", pos_inc);
+                }
                 std::string info = line.substr(pos_inc, pos_comma - pos_inc);
-                std::cout << info << std::endl;
-                std::cout << line[pos_inc] << " " << line[pos_comma] << std::endl;
                 vertexes[number] = info;
                 number++;
             }
@@ -150,8 +158,8 @@ bool joern_graph_maker::parsing_dot_file(
 }
 
 
-std::string joern_graph_maker::get_result_file_path(int id) {
-    return "./results/" + std::to_string(id) + "/output.dot";
+std::string joern_graph_maker::get_result_file_path(const std::string id) {
+    return "./joern_work_folder/results/" + id + "/output.dot";
 }
 
 void joern_graph_maker::make_graph(files_stack &stack) {
@@ -166,7 +174,9 @@ void joern_graph_maker::make_graph(files_stack &stack) {
                 "Ошибка при парсинге файла: " + stack.get_file_path(i)
             );
         }
-        create_dot_file(stack.get_file_path(i), result_folder, i);
+        std::filesystem::path id_path(stack.get_file_path(i));
+        const std::string id = id_path.filename();
+        create_dot_file(stack.get_file_path(i), result_folder, id);
     }
 }
 

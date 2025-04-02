@@ -34,8 +34,7 @@
 
 workspace/
 workspace/*
-cpg.bin
-.vscode/settings.json
-test_main*
+.vscode/*
+.vscode/
 .history/
 .history/*
