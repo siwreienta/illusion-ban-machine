@@ -80,20 +80,20 @@ int joern_graph_maker::load_graph_to_db(int id){
 
 void joern_graph_maker::create_dot_file(
     const std::string &file,
-    const std::string &dir,
+    // const std::string &dir,
     const std::string &id
 ) {
     std::filesystem::path path_to_file(file);
     std::string command =
-        "joern-export --repr=pdg --format=dot --out ../../joern_work_folder/results/" + id;
+        "joern-export --repr=pdg --format=dot --out ../joern_work_folder/results/" + id;
     int result = std::system(command.c_str());
     if (result != 0) {
         throw parcerer_errors("Ошибка при создании .dot для файла: " + file);
     }
     const std::string path_to_dot_folder =
-        "../../joern_work_folder/results/" + id;
+        "../joern_work_folder/results/" + id;
     const std::string path_to_customized_file =
-        "../../joern_work_folder/results/" + id + "/output.dot";
+        "../joern_work_folder/results/" + id + "/output.dot";
     customize_graph(path_to_dot_folder, path_to_customized_file);
 }
 
@@ -138,7 +138,7 @@ void joern_graph_maker::customize_graph(
     for (long long i = 0; i < number; i++) {
         customized_file << i << " " << vertexes[i] << "\n";
     }
-    for (long long i = 0; i < edges.size(); i++) {
+    for (long long i = 0; i < static_cast<long long>(edges.size()); i++) {
         customized_file << edges[i].first << " " << edges[i].second << "\n";
     }
     customized_file.close();
@@ -192,7 +192,7 @@ bool joern_graph_maker::parsing_dot_file(
 
 
 std::string joern_graph_maker::get_result_file_path(int id) {
-    return "../../joern_work_folder/results/" + std::to_string(id) + ".cpp/output.dot";
+    return "../joern_work_folder/results/" + std::to_string(id) + ".cpp/output.dot";
 }
 
 void joern_graph_maker::make_graph(files_stack &stack) {
@@ -210,7 +210,6 @@ void joern_graph_maker::make_graph(files_stack &stack) {
         std::filesystem::path id_path(stack.get_file_path(i));
         const std::string id = id_path.filename();
         create_dot_file(stack.get_file_path(i), result_folder, id);
-
     }
 }
 

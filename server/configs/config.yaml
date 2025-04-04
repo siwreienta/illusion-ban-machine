@@ -13,7 +13,7 @@ components_manager:
       path: /load-code
       task_processor: main-task-processor
     handler-check-status:
-      method: GET
+      method: GET,POST
       path: /check-status
       task_processor: main-task-processor
     handler-ping:

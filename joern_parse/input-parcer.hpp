@@ -8,6 +8,7 @@
 #include <map>
 #include <unordered_map>
 #include <vector>
+#include <functional>
 
 namespace graph_maker {
 
@@ -46,11 +47,12 @@ public:
 
     void create_dot_file(
         const std::string &file,
-        const std::string &dir,
+        // const std::string &dir,
         const std::string &id
     );
 
     void make_graph(files_stack &stack);
+    // void make_graph(files_stack &stack, std::function<void(std::string)> callback);
 
     std::string get_result_file_path(int id);
 

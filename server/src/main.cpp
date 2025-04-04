@@ -6,6 +6,8 @@
 #include <userver/testsuite/testsuite_support.hpp>
 #include <userver/utils/daemon_run.hpp>
 #include "server.hpp"
+#include "../../joern_parse/input-parcer.hpp"
+#include <filesystem>
 
 int main(int argc, char *argv[]) {
     auto component_list =
@@ -18,6 +20,5 @@ int main(int argc, char *argv[]) {
 
     apotheosis::AppendCheckStatus(component_list);
     apotheosis::AppendLoadCodes(component_list);
-
     return userver::utils::DaemonMain(argc, argv, component_list);
 }
