@@ -1,5 +1,5 @@
-#ifndef GRAPHGETTER_HPP_
-#define GRAPHGETTER_HPP_
+#ifndef INPUTPARCER_HPP_
+#define INPUTPARCER_HPP_
 
 #include <cstdlib>
 #include <filesystem>
@@ -33,7 +33,9 @@ public:
     int number_of_files_ = 0;
     const std::string folder_;
 
-    files_stack(const std::string &folder_name);
+    files_stack(const std::string &folder_name, std::vector<int> &ids);
+
+    void load_and_create_files(std::vector<int> &ids);
 
     const std::string &get_file_path(int number);
 };
@@ -50,7 +52,9 @@ public:
 
     void make_graph(files_stack &stack);
 
-    std::string get_result_file_path(const std::string id);
+    std::string get_result_file_path(int id);
+
+    int load_graph_to_db(int id);
 
     void clear_directory(std::string path_to_dir);
 
@@ -66,6 +70,8 @@ public:
         const std::string &input_file,
         const std::string &output_file
     );
+
+
 };
 
 }  // namespace graph_maker

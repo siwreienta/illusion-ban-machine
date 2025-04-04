@@ -1,4 +1,5 @@
 #include "input-parcer.hpp"
+#include "../database/database.hpp"
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
@@ -12,7 +13,7 @@
 
 namespace graph_maker {
 
-files_stack::files_stack(const std::string &folder_name)
+files_stack::files_stack(const std::string &folder_name, std::vector<int> &ids)
     : folder_(folder_name) {
     if (!std::filesystem::exists(folder_name)) {
         throw parcerer_errors("Директория не существует: " + folder_name);
@@ -20,7 +21,24 @@ files_stack::files_stack(const std::string &folder_name)
     if (!std::filesystem::is_directory(folder_name)) {
         throw parcerer_errors("Это не директория: " + folder_name);
     }
+    load_and_create_files(ids);
     files = get_files(folder_name);
+}
+
+void files_stack::load_and_create_files(std::vector<int> &ids){
+    apotheosis::database db;
+    for(int id: ids){
+        std::string code = db.get_solution(id);
+        std::ofstream file_of_code(folder_ + "/" + std::to_string(id) + ".cpp");
+    if (!file_of_code.is_open()) {
+        throw std::runtime_error(
+            "Ошибка при открытии и создании файла с кодом для: " + std::to_string(id)
+        );
+    }
+        file_of_code << code;
+        file_of_code.close();
+    }
+
 }
 
 std::vector<std::string> files_stack::get_files(const std::string &folder_name
@@ -43,6 +61,23 @@ const std::string &files_stack::get_file_path(int number) {
     }
 }
 
+int joern_graph_maker::load_graph_to_db(int id){
+    std::string file = get_result_file_path(id);
+    std::ifstream file_path(file, std::ios::binary);
+    if (!file_path.is_open()) {
+        throw parcerer_errors("Не получилось открыть файл с графом для выгрузки в дб: " + file);
+    }
+    std::uintmax_t file_size = std::filesystem::file_size(file);
+    std::string graph;
+    graph.resize(file_size);
+
+    if (!file_path.read(graph.data(), file_size)) {
+        throw parcerer_errors("Не считался граф обратитесь к Софе, тут че то дикое сломалось: " + file);
+    }
+    apotheosis::database db;
+    return db.load_graph(id, graph);
+}
+
 void joern_graph_maker::create_dot_file(
     const std::string &file,
     const std::string &dir,
@@ -50,15 +85,15 @@ void joern_graph_maker::create_dot_file(
 ) {
     std::filesystem::path path_to_file(file);
     std::string command =
-        "joern-export --repr=pdg --format=dot --out ./joern_work_folder/results/" + id;
+        "joern-export --repr=pdg --format=dot --out ../../joern_work_folder/results/" + id;
     int result = std::system(command.c_str());
     if (result != 0) {
         throw parcerer_errors("Ошибка при создании .dot для файла: " + file);
     }
     const std::string path_to_dot_folder =
-        "./joern_work_folder/results/" + id;
+        "../../joern_work_folder/results/" + id;
     const std::string path_to_customized_file =
-        "./joern_work_folder/results/" + id + "/output.dot";
+        "../../joern_work_folder/results/" + id + "/output.dot";
     customize_graph(path_to_dot_folder, path_to_customized_file);
 }
 
@@ -156,8 +191,8 @@ bool joern_graph_maker::parsing_dot_file(
 }
 
 
-std::string joern_graph_maker::get_result_file_path(const std::string id) {
-    return "./joern_work_folder/results/" + id + "/output.dot";
+std::string joern_graph_maker::get_result_file_path(int id) {
+    return "../../joern_work_folder/results/" + std::to_string(id) + ".cpp/output.dot";
 }
 
 void joern_graph_maker::make_graph(files_stack &stack) {
@@ -175,6 +210,7 @@ void joern_graph_maker::make_graph(files_stack &stack) {
         std::filesystem::path id_path(stack.get_file_path(i));
         const std::string id = id_path.filename();
         create_dot_file(stack.get_file_path(i), result_folder, id);
+
     }
 }
 
@@ -187,7 +223,7 @@ void joern_graph_maker::clear_directory(std::string path_to_dir) {
     }
     for (const auto &element :
          std::filesystem::directory_iterator(path_to_dir)) {
-        if (std::filesystem::is_regular_file(element.path())) {
+        if (std::filesystem::is_regular_file(element.path()) && element.path().extension() != ".txt") {
             std::filesystem::remove(element.path());
         }
         if (std::filesystem::is_directory(element.path())) {
