@@ -15,11 +15,14 @@ bash ./build_and_run_server.sh
 ![alt text](media_for_readme/image.png)
 
 Если перейти во вкладку загрузки кодов и выгрузить их, то программа запустит парсинг кодов и расположит обработанные .dot файлы в results. 
+
 ![alt text](media_for_readme/image-1.png)
 
 При выполнении возникнет ошибка => в терминал "клиента" будет выведено описание возникшей проблемы. Если все пройдет успешно Вы получите сообщение:
+
 ![alt text](media_for_readme/image-2.png)
 
 Далее вы можете проверить их на сходство при помощи Compare Graphs:
 ![alt text](media_for_readme/image-3.png)
+:)
 ![alt text](media_for_readme/image-4.png)
