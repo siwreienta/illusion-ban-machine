@@ -16,6 +16,10 @@ components_manager:
       method: GET,POST
       path: /check-status
       task_processor: main-task-processor
+    handler-main-page:
+      method: GET
+      path: /
+      task_processor: main-task-processor
     handler-ping:
       method: GET
       path: /ping
