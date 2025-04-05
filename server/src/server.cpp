@@ -124,12 +124,12 @@ public:
                 const std::string code1 = request.GetArg("code1");
                 const std::string code2 = request.GetArg("code2");
 
-                std::ofstream file1("../joern_work_folder/test_files/0.cpp");
-                std::ofstream file2("../joern_work_folder/test_files/1.cpp");
-                file1 << code1;
-                file2 << code2;
-                file1.close();
-                file2.close();
+                // std::ofstream file1("../joern_work_folder/test_files/0.cpp");
+                // std::ofstream file2("../joern_work_folder/test_files/1.cpp");
+                // file1 << code1;
+                // file2 << code2;
+                // file1.close();
+                // file2.close();
 
                 graph_maker::joern_graph_maker joern_parser;
                 graph_maker::files_stack file_stack(
