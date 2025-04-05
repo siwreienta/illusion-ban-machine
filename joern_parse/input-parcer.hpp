@@ -4,11 +4,10 @@
 #include <cstdlib>
 #include <filesystem>
 #include <iostream>
-#include <string>
 #include <map>
+#include <string>
 #include <unordered_map>
 #include <vector>
-#include <functional>
 
 namespace graph_maker {
 
@@ -34,9 +33,7 @@ public:
     int number_of_files_ = 0;
     const std::string folder_;
 
-    files_stack(const std::string &folder_name, std::vector<int> &ids);
-
-    void load_and_create_files(std::vector<int> &ids);
+    files_stack(const std::string &folder_name);
 
     const std::string &get_file_path(int number);
 };
@@ -45,18 +42,11 @@ class joern_graph_maker {
 public:
     joern_graph_maker() = default;
 
-    void create_dot_file(
-        const std::string &file,
-        // const std::string &dir,
-        const std::string &id
-    );
+    void create_dot_file(const std::string &file, const std::string &id);
 
     void make_graph(files_stack &stack);
-    // void make_graph(files_stack &stack, std::function<void(std::string)> callback);
 
     std::string get_result_file_path(int id);
-
-    int load_graph_to_db(int id);
 
     void clear_directory(std::string path_to_dir);
 
@@ -72,8 +62,6 @@ public:
         const std::string &input_file,
         const std::string &output_file
     );
-
-
 };
 
 }  // namespace graph_maker

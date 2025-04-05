@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Load | Illusion</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        h1 { color: #333; text-align: center; }
+        form { display: flex; flex-direction: column; gap: 15px; }
+        textarea { width: 100%; height: 200px; padding: 10px; font-family: monospace; }
+        button { padding: 10px 20px; font-size: 16px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #45a049; }
+        .result { margin-top: 20px; padding: 10px; background: #f0f0f0; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>Загрузите два кода для сравнения</h1>
+    <form id="codeForm">
+        <div>
+            <h3>Код 1 (будет сохранён в 0.cpp):</h3>
+            <textarea name="code1" required></textarea>
+        </div>
+        <div>
+            <h3>Код 2 (будет сохранён в 1.cpp):</h3>
+            <textarea name="code2" required></textarea>
+        </div>
+        <button type="submit">Отправить</button>
+    </form>
+    <div id="result" class="result"></div>
+
+    <script>
+        document.getElementById("codeForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const response = await fetch("/load-code", {
+                method: "POST",
+                body: formData
+            });
+            const result = await response.text();
+            document.getElementById("result").innerHTML = result;
+
+            // Добавляем кнопку для перехода на проверку
+            if (response.ok) {
+                const checkButton = document.createElement("button");
+                checkButton.textContent = "Проверить статус";
+                checkButton.onclick = () => location.href = "/check-status";
+                document.getElementById("result").appendChild(checkButton);
+            }
+        });
+    </script>
+</body>
+</html>
