@@ -50,8 +50,9 @@ void Subgraph::add_vertex(std::string type) {
 }
 
 void Graph::add_edge(int v1, int v2) {
+    if (v1!=v2){
     m_edges[v1].insert(v2);
-    m_roots.erase(v2);
+    m_roots.erase(v2);}
 }
 
 void Subgraph::add_edge(int v1, int v2) {

@@ -15,6 +15,9 @@ void GraphHandler::add_graph(Graph graph) {
 }
 
 long double GraphHandler::check(int first_number, int second_number) {
+    if (graphs[first_number].get_V()>graphs[second_number].get_V()){
+        std::swap(first_number,second_number);
+    }
     std::vector<Subgraph> subgraphs =
         graphs[first_number].devide_into_subgraphs();
     VF2 vf2(subgraphs, graphs[second_number]);

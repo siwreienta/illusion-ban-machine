@@ -5,14 +5,14 @@
 
 int main() {
     std::cout << "Я запустился!\n";
-    // std::cout<< "Ручной ввод:\n";
-    // apotheosis::Interpreter interpreter;
-    // interpreter.start_interpreter();
+    std::cout<< "Ручной ввод:\n";
+    apotheosis::Interpreter interpreter;
+    interpreter.start_interpreter();
 
     // std::cout<< "Чек a и b: "<< apotheosis::check_two_graphs("a.dot",
     // "b.dot")<<'\n';
-    std::cout << "Чек 0 и 1: " << apotheosis::check_two_graphs("0.dot", "1.dot")
-              << '\n';
+    // std::cout << "Чек 0 и 1: " << apotheosis::check_two_graphs("0.dot", "0.dot")
+            //   << '\n';
 
     apotheosis::Graph g("Графичек ^_^");
 

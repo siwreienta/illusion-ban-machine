@@ -60,6 +60,9 @@ public:
     void add_vertex(std::string type);
     void add_edge(int v1, int v2);
     std::vector<Subgraph> devide_into_subgraphs();
+    int get_V(){
+        return m_V;
+    }
     Graph(std::string name);
 };
 
