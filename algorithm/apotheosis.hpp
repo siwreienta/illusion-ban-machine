@@ -39,6 +39,7 @@ public:
 
     // Список смежности
     std::vector<std::set<int>> m_edges;
+    std::vector<int> m_dist;
 
     std::unordered_map<std::string, std::vector<int>> vertex_map;
     std::vector<std::string> vertex_table;
@@ -47,22 +48,25 @@ public:
 
     std::set<int> m_roots;
 
-    std::vector<int> bfs(int root);
-    void make_subgraphs_and_put_into_vector(
-        int root,
-        std::set<std::vector<int>> &est_li
-    );
 
     Subgraph make_subgraph(std::vector<int> vertexes, int number);
+    void make_subgraphs(
+        int n,
+        int last,
+        std::vector<int> &taken_vertexes
+    );
+    void bfs(int root);
 
 public:
     friend class VF2;
     void add_vertex(std::string type);
     void add_edge(int v1, int v2);
     std::vector<Subgraph> devide_into_subgraphs();
-    int get_V(){
+
+    int get_V() {
         return m_V;
     }
+
     Graph(std::string name);
 };
 

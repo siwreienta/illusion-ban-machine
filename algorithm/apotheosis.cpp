@@ -50,9 +50,10 @@ void Subgraph::add_vertex(std::string type) {
 }
 
 void Graph::add_edge(int v1, int v2) {
-    if (v1!=v2){
-    m_edges[v1].insert(v2);
-    m_roots.erase(v2);}
+    if (v1 != v2) {
+        m_edges[v1].insert(v2);
+        m_roots.erase(v2);
+    }
 }
 
 void Subgraph::add_edge(int v1, int v2) {
@@ -60,12 +61,11 @@ void Subgraph::add_edge(int v1, int v2) {
     m_reversed_edges[v2].insert(v1);
 }
 
-std::vector<int> Graph::bfs(int root) {
-    std::vector<int> result;
+void Graph::bfs(int root) {
     std::queue<int> queue;
-    std::vector<int> dist(m_V, 100);
-
-    dist[root] = 0;
+    m_dist.assign(m_V, 10000);
+    m_dist[root] = 0;
+    int mx = 0;
 
     queue.push(root);
 
@@ -73,20 +73,14 @@ std::vector<int> Graph::bfs(int root) {
         int current = queue.front();
         queue.pop();
 
-        if (dist[current] >= DEPTH_OF_DEVISION) {
-            break;
-        }
-
-        result.push_back(current);
-
         for (int neighbor : m_edges[current]) {
-            if (dist[neighbor] == 100) {
-                dist[neighbor] = dist[current] + 1;
+            if (m_dist[neighbor] == 10000) {
+                m_dist[neighbor] = m_dist[current] + 1;
+                mx = std::max(mx, m_dist[current] + 1);
                 queue.push(neighbor);
             }
         }
     }
-    return result;
 }
 
 Subgraph Graph::make_subgraph(const std::vector<int> vertexes, int number) {
@@ -104,72 +98,46 @@ Subgraph Graph::make_subgraph(const std::vector<int> vertexes, int number) {
     return result;
 }
 
-void Subgraph::dfs(int v, std::vector<int> &used) {
-    if (used[v]) {
-        return;
-    }
-    used[v] = 1;
+void Graph::make_subgraphs(int n, int last, std::vector<int> &taken_vertexes) {
+    int v = taken_vertexes[n];
+    int i = 0;
     for (auto u : m_edges[v]) {
-        dfs(u, used);
-    }
-    for (auto u : m_reversed_edges[v]) {
-        dfs(u, used);
-    }
-}
-
-bool check_svyaznost(Subgraph &subgraph) {
-    std::vector<int> used(DEPTH_OF_DEVISION, 0);
-    subgraph.dfs(0, used);
-    if (std::find(used.begin(), used.end(), 0) == used.end()) {
-        return true;
-    }
-    return false;
-}
-
-void Graph::make_subgraphs_and_put_into_vector(
-    int root,
-    std::set<std::vector<int>> &est_li
-) {
-    std::vector<int> close_vertexes = bfs(root);
-    int size = close_vertexes.size();
-    int depth = DEPTH_OF_DEVISION;
-    sort(close_vertexes.begin(), close_vertexes.end());
-
-    // 5 форов, для DEPTH_OF_DIVISION = 5
-    // Вполне естественно, что это надо поменять после MVP
-    int i1 = 0;
-    for (int i2 = i1 + 1; i2 < size - depth + 2; i2++) {
-        for (int i3 = i2 + 1; i3 < size - depth + 3; i3++) {
-            for (int i4 = i3 + 1; i4 < size - depth + 4; i4++) {
-                for (int i5 = i4 + 1; i5 < size - depth + 5; i5++) {
-                    std::vector<int> vertexes = {
-                        close_vertexes[i1], close_vertexes[i2],
-                        close_vertexes[i3], close_vertexes[i4],
-                        close_vertexes[i5]};
-                    sort(vertexes.begin(), vertexes.end());
-                    if (!est_li.contains(vertexes)) {
-                        est_li.insert(vertexes);
-                        Subgraph maybe_subgraph =
-                            make_subgraph(vertexes, m_subgraphs.size());
-                        if (check_svyaznost(maybe_subgraph)) {
-                            m_subgraphs.push_back(std::move(maybe_subgraph));
-                        }
-                    }
-                }
+        for (int j = 0; j < n; j++) {
+            if (m_edges[taken_vertexes[j]].contains(u)) {
+                goto end_of_iteration;
             }
         }
+        if (i > last && m_dist[u] > m_dist[v]) {
+            taken_vertexes.push_back(u);
+            if (taken_vertexes.size() == DEPTH_OF_DEVISION) {
+                m_subgraphs.push_back(
+                    make_subgraph(taken_vertexes, m_subgraphs.size())
+                );
+            } else {
+                make_subgraphs(n, i, taken_vertexes);
+                make_subgraphs(n + 1, -1, taken_vertexes);
+            }
+            taken_vertexes.pop_back();
+        }
+    end_of_iteration:
+        i++;
     }
 }
 
 std::vector<Subgraph> Graph::devide_into_subgraphs() {
     if (m_subgraphs.empty()) {
-        std::set<std::vector<int>> est_li;
+        std::vector<int> taken_vertexes;
+        taken_vertexes.reserve(DEPTH_OF_DEVISION + 1);
         for (int root = 0; root < m_V; root++) {
             if (!m_roots.contains(root)) {
-                make_subgraphs_and_put_into_vector(root, est_li);
+                bfs(root);
+                taken_vertexes.assign(1, root);
+                make_subgraphs(0, -1, taken_vertexes);
             }
         }
     }
+    std::cout << "m_subgraphs.size() = " << m_subgraphs.size() << '\n';
+    m_dist.clear();
     return m_subgraphs;
 }
 
