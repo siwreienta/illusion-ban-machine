@@ -15,13 +15,11 @@ void GraphHandler::add_graph(Graph graph) {
 }
 
 long double GraphHandler::check(int first_number, int second_number) {
-    if (graphs[first_number].get_V()>graphs[second_number].get_V()){
-        std::swap(first_number,second_number);
-    }
-    std::vector<Subgraph> subgraphs =
+    std::vector<Subgraph> subgraphs1 =
         graphs[first_number].devide_into_subgraphs();
-    VF2 vf2(subgraphs, graphs[second_number]);
-    return vf2.check();
+    std::vector<Subgraph> subgraphs2 =
+        graphs[second_number].devide_into_subgraphs();
+    return (VF2(subgraphs1, graphs[second_number]).check()+VF2(subgraphs2, graphs[first_number]).check())/2;
 }
 
 Graph GraphHandler::read_graph(std::string &name, std::ifstream &is) {

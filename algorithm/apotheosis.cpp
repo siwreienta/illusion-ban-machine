@@ -136,7 +136,7 @@ std::vector<Subgraph> Graph::devide_into_subgraphs() {
             }
         }
     }
-    std::cout << "m_subgraphs.size() = " << m_subgraphs.size() << '\n';
+    // std::cout << "m_subgraphs.size() = " << m_subgraphs.size() << '\n';
     m_dist.clear();
     return m_subgraphs;
 }
