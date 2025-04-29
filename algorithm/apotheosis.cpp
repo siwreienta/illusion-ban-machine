@@ -61,26 +61,26 @@ void Subgraph::add_edge(int v1, int v2) {
     m_reversed_edges[v2].insert(v1);
 }
 
-void Graph::bfs(int root) {
+void Graph::end_read() {
     std::queue<int> queue;
-    m_dist.assign(m_V, 10000);
-    m_dist[root] = 0;
-    int mx = 0;
-
-    queue.push(root);
+    m_dist.resize(m_V, 10000);
+    for (auto root : m_roots) {
+        m_dist[root] = 0;
+        queue.push(root);
+    }
 
     while (!queue.empty()) {
         int current = queue.front();
         queue.pop();
 
         for (int neighbor : m_edges[current]) {
-            if (m_dist[neighbor] == 10000) {
+            if (m_dist[neighbor] > m_dist[current] + 1) {
                 m_dist[neighbor] = m_dist[current] + 1;
-                mx = std::max(mx, m_dist[current] + 1);
                 queue.push(neighbor);
             }
         }
     }
+    m_roots.clear();
 }
 
 Subgraph Graph::make_subgraph(const std::vector<int> vertexes, int number) {
@@ -129,15 +129,13 @@ std::vector<Subgraph> Graph::devide_into_subgraphs() {
         std::vector<int> taken_vertexes;
         taken_vertexes.reserve(DEPTH_OF_DEVISION + 1);
         for (int root = 0; root < m_V; root++) {
-            if (!m_roots.contains(root)) {
-                bfs(root);
+            if (m_dist[root]) {
                 taken_vertexes.assign(1, root);
                 make_subgraphs(0, -1, taken_vertexes);
             }
         }
     }
     // std::cout << "m_subgraphs.size() = " << m_subgraphs.size() << '\n';
-    m_dist.clear();
     return m_subgraphs;
 }
 

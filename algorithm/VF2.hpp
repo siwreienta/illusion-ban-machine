@@ -19,7 +19,7 @@ private:
         Subgraph &subgraph,
         int M_counter
     );
-    bool isFeasible(
+    bool check_connects(
         const std::vector<int> &vertex_sootvetstvie,
         int u,
         int v,

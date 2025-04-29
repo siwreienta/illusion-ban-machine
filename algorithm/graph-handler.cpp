@@ -19,7 +19,9 @@ long double GraphHandler::check(int first_number, int second_number) {
         graphs[first_number].devide_into_subgraphs();
     std::vector<Subgraph> subgraphs2 =
         graphs[second_number].devide_into_subgraphs();
-    return (VF2(subgraphs1, graphs[second_number]).check()+VF2(subgraphs2, graphs[first_number]).check())/2;
+    return (VF2(subgraphs1, graphs[second_number]).check() +
+            VF2(subgraphs2, graphs[first_number]).check()) /
+           2;
 }
 
 Graph GraphHandler::read_graph(std::string &name, std::ifstream &is) {
@@ -57,6 +59,7 @@ Graph GraphHandler::read_graph(std::string &name, std::ifstream &is) {
         int v2 = vertex_map[vertex_2_name];
         graph.add_edge(v1, v2);
     }
+    graph.end_read();
     return graph;
 }
 
