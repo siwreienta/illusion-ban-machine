@@ -6,29 +6,38 @@
 
 namespace apotheosis {
 
-void GraphHandler::privet() {
-    std::cout << "Привет, сокомандники!\nZZZZZ\n";
+
+long double check_two_graphs(std::string &fpath_1, std::string &fpath_2) {
+    GraphHandler gh;
+    gh.read_graph(fpath_1);
+    gh.read_graph(fpath_2);
+    return gh.check(0, 1);
 }
 
-void GraphHandler::add_graph(Graph graph) {
-    graphs.push_back(graph);
-}
 
 long double GraphHandler::check(int first_number, int second_number) {
     std::vector<Subgraph> subgraphs1 =
-        graphs[first_number].devide_into_subgraphs();
+        graphs[first_number].get_subgraphs();
     std::vector<Subgraph> subgraphs2 =
-        graphs[second_number].devide_into_subgraphs();
+        graphs[second_number].get_subgraphs();
     return (VF2(subgraphs1, graphs[second_number]).check() +
             VF2(subgraphs2, graphs[first_number]).check()) /
            2;
 }
 
-Graph GraphHandler::read_graph(std::string &name, std::ifstream &is) {
-    Graph graph(name);
+void GraphHandler::read_graph(std::string &filepath) {
+    std::ifstream is(filepath);
+    if (!(is)) {
+        throw unable_to_open(filepath);
+    }
 
-    // Подразумеваю, что вершины будут хорошо переименованы, пока нет нужна мапа
-    std::unordered_map<std::string, int> vertex_map;
+    std::string key;
+    std::string name;
+    if (!(is >> key >> name) || key != "digraph") {
+        throw not_a_grath(filepath);
+    }
+
+    Graph graph(name);
 
     int V = 0;  // Количество вершин
     int E = 0;  // Количество ребер
@@ -44,23 +53,21 @@ Graph GraphHandler::read_graph(std::string &name, std::ifstream &is) {
         if (!(is >> vertex_name >> vertex_type)) {
             throw bad_read();
         }
-        vertex_map[vertex_name] = i;
         graph.add_vertex(vertex_type);
     }
 
     // В дальнейшем должны быть инты, дабы не костылить
-    std::string vertex_1_name;
-    std::string vertex_2_name;
+    int v1 = 0;
+    int v2 = 0;
     for (int i = 0; i < E; i++) {
-        if (!(is >> vertex_1_name >> vertex_2_name)) {
+        if (!(is >> v1 >> v2)) {
             throw bad_read();
         }
-        int v1 = vertex_map[vertex_1_name];
-        int v2 = vertex_map[vertex_2_name];
         graph.add_edge(v1, v2);
     }
     graph.end_read();
-    return graph;
+    graphs.push_back(std::move(graph));
 }
+
 
 }  // namespace apotheosis

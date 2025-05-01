@@ -17,6 +17,8 @@
 
 namespace apotheosis {
 
+long double check_two_graphs(std::string &fpath_1, std::string &fpath_2);
+
 const int DEPTH_OF_DEVISION = 5;
 
 template <class T>
@@ -27,7 +29,6 @@ void print_vec(std::vector<T> &vec) {
     std::cout << std::endl;
 }
 
-std::string tolower_ru(const std::string &utf8_str);
 
 class Subgraph;
 
@@ -55,7 +56,8 @@ public:
     friend class VF2;
     void add_vertex(std::string type);
     void add_edge(int v1, int v2);
-    std::vector<Subgraph> devide_into_subgraphs();
+    std::vector<Subgraph> &get_subgraphs();
+    void start_read(int V);
     void end_read();
 
     int get_V() {

@@ -2,39 +2,6 @@
 
 namespace apotheosis {
 
-std::string tolower_ru(const std::string &utf8_str) {
-    static const std::unordered_map<std::string, std::string> upperToLower = {
-        {"А", "а"}, {"Б", "б"}, {"В", "в"}, {"Г", "г"}, {"Д", "д"}, {"Е", "е"},
-        {"Ё", "ё"}, {"Ж", "ж"}, {"З", "з"}, {"И", "и"}, {"Й", "й"}, {"К", "к"},
-        {"Л", "л"}, {"М", "м"}, {"Н", "н"}, {"О", "о"}, {"П", "п"}, {"Р", "р"},
-        {"С", "с"}, {"Т", "т"}, {"У", "у"}, {"Ф", "ф"}, {"Х", "х"}, {"Ц", "ц"},
-        {"Ч", "ч"}, {"Ш", "ш"}, {"Щ", "щ"}, {"Ъ", "ъ"}, {"Ы", "ы"}, {"Ь", "ь"},
-        {"Э", "э"}, {"Ю", "ю"}, {"Я", "я"}};
-
-    std::string result;
-    for (size_t i = 0; i < utf8_str.size();) {
-        bool replaced = false;
-        if ((utf8_str[i] & 0xE0) == 0xC0 && i + 1 < utf8_str.size()) {
-            std::string char2bytes = utf8_str.substr(i, 2);
-            auto it = upperToLower.find(char2bytes);
-            if (it != upperToLower.end()) {
-                result += it->second;
-                i += 2;
-                replaced = true;
-            }
-        }
-        if (!replaced) {
-            result += utf8_str[i];
-            i++;
-        }
-    }
-
-    for (char &c : result) {
-        c = tolower(static_cast<unsigned char>(c));
-    }
-
-    return result;
-}
 
 void Graph::add_vertex(std::string type) {
     vertex_map[type].push_back(m_V);
@@ -118,14 +85,15 @@ void Graph::make_subgraphs(int n, int last, std::vector<int> &taken_vertexes) {
                 make_subgraphs(n + 1, -1, taken_vertexes);
             }
             taken_vertexes.pop_back();
-        }
+        }      
     end_of_iteration:
         i++;
     }
 }
 
-std::vector<Subgraph> Graph::devide_into_subgraphs() {
+std::vector<Subgraph> &Graph::get_subgraphs() {
     if (m_subgraphs.empty()) {
+        m_subgraphs.reserve(15000);
         std::vector<int> taken_vertexes;
         taken_vertexes.reserve(DEPTH_OF_DEVISION + 1);
         for (int root = 0; root < m_V; root++) {
@@ -135,7 +103,7 @@ std::vector<Subgraph> Graph::devide_into_subgraphs() {
             }
         }
     }
-    // std::cout << "m_subgraphs.size() = " << m_subgraphs.size() << '\n';
+    std::cout << "m_subgraphs.size() = " << m_subgraphs.size() << '\n';
     return m_subgraphs;
 }
 

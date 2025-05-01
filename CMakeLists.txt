@@ -11,7 +11,7 @@ option(BUILD_ALGORITHM "Build the algorithm target" ON)
 include(default-options.cmake)
 
 if (BUILD_ALGORITHM)
-    add_executable(${PROJECT_NAME}_algorithm algorithm/main.cpp algorithm/graph-handler.cpp algorithm/apotheosis.cpp algorithm/interpreter.cpp algorithm/VF2.cpp)
+    add_executable(${PROJECT_NAME}_algorithm algorithm/main.cpp algorithm/graph-handler.cpp algorithm/apotheosis.cpp algorithm/VF2.cpp)
 endif()
 
 if (BUILD_SERVER)
