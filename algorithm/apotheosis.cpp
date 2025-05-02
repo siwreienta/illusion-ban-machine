@@ -2,7 +2,6 @@
 
 namespace apotheosis {
 
-
 void Graph::add_vertex(std::string type) {
     vertex_map[type].push_back(m_V);
     vertex_table.push_back(type);
@@ -77,21 +76,19 @@ void Graph::make_subgraphs(int n, int last, std::vector<int> &taken_vertexes) {
         if (i > last && m_dist[u] > m_dist[v]) {
             taken_vertexes.push_back(u);
             if (taken_vertexes.size() == DEPTH_OF_DEVISION) {
-                m_subgraphs.push_back(
-                    make_subgraph(taken_vertexes, m_subgraphs.size())
-                );
+                m_subgraphs.push_back(taken_vertexes);
             } else {
                 make_subgraphs(n, i, taken_vertexes);
                 make_subgraphs(n + 1, -1, taken_vertexes);
             }
             taken_vertexes.pop_back();
-        }      
+        }
     end_of_iteration:
         i++;
     }
 }
 
-std::vector<Subgraph> &Graph::get_subgraphs() {
+void Graph::devide_into_subgraphs() {
     if (m_subgraphs.empty()) {
         m_subgraphs.reserve(50000);
         std::vector<int> taken_vertexes;
@@ -104,7 +101,6 @@ std::vector<Subgraph> &Graph::get_subgraphs() {
         }
     }
     std::cout << "m_subgraphs.size() = " << m_subgraphs.size() << '\n';
-    return m_subgraphs;
 }
 
 Graph::Graph(std::string name) : m_V(0), m_E(0), m_name(name) {

@@ -29,7 +29,6 @@ void print_vec(std::vector<T> &vec) {
     std::cout << std::endl;
 }
 
-
 class Subgraph;
 
 class Graph {
@@ -45,7 +44,7 @@ private:
     std::unordered_map<std::string, std::vector<int>> vertex_map;
     std::vector<std::string> vertex_table;
 
-    std::vector<Subgraph> m_subgraphs;
+    std::vector<std::vector<int>> m_subgraphs;
 
     std::set<int> m_roots;
 
@@ -56,7 +55,7 @@ public:
     friend class VF2;
     void add_vertex(std::string type);
     void add_edge(int v1, int v2);
-    std::vector<Subgraph> &get_subgraphs();
+    void devide_into_subgraphs();
     void start_read(int V);
     void end_read();
 

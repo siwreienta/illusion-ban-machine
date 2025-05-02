@@ -9,9 +9,10 @@ namespace apotheosis {
 class GraphHandler {
 private:
     std::vector<Graph> graphs;
-    
+
 public:
     void read_graph(std::string &filepath);
+
     int size() {
         return static_cast<int>(graphs.size());
     }

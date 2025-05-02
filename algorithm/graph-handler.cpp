@@ -6,7 +6,6 @@
 
 namespace apotheosis {
 
-
 long double check_two_graphs(std::string &fpath_1, std::string &fpath_2) {
     GraphHandler gh;
     gh.read_graph(fpath_1);
@@ -14,14 +13,12 @@ long double check_two_graphs(std::string &fpath_1, std::string &fpath_2) {
     return gh.check(0, 1);
 }
 
-
 long double GraphHandler::check(int first_number, int second_number) {
-    std::vector<Subgraph> subgraphs1 =
-        graphs[first_number].get_subgraphs();
-    std::vector<Subgraph> subgraphs2 =
-        graphs[second_number].get_subgraphs();
-    return (VF2(subgraphs1, graphs[second_number]).check() +
-            VF2(subgraphs2, graphs[first_number]).check()) /
+    graphs[first_number].devide_into_subgraphs();
+
+    graphs[second_number].devide_into_subgraphs();
+    return (VF2(graphs[first_number], graphs[second_number]).check() +
+            VF2(graphs[second_number], graphs[first_number]).check()) /
            2;
 }
 
@@ -68,6 +65,5 @@ void GraphHandler::read_graph(std::string &filepath) {
     graph.end_read();
     graphs.push_back(std::move(graph));
 }
-
 
 }  // namespace apotheosis

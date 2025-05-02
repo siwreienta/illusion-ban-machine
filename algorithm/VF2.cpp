@@ -38,11 +38,9 @@ bool VF2::VF2Recursive(
         return true;
     }
 
-
     std::string type = subgraph.vertex_table[u];
     for (int v : m_other_graph.vertex_map[type]) {
-        if (find(begin(vertex_map), end(vertex_map), v) ==
-                end(vertex_map) &&
+        if (find(begin(vertex_map), end(vertex_map), v) == end(vertex_map) &&
             check_connects(vertex_map, u, v, subgraph)) {
             vertex_map[u] = v;
             if (VF2Recursive(vertex_map, subgraph, u + 1)) {
@@ -52,24 +50,24 @@ bool VF2::VF2Recursive(
             vertex_map[u] = -1;
         }
     }
-    
 
     return false;
 }
 
-
 long double VF2::check() {
     int founded = 0;
-    for (auto &subgraph : m_subgraphs) {
-    vertex_map.assign(DEPTH_OF_DEVISION, -1);
+    int i = 0;
+    for (auto &vertexes : m_this_graph.m_subgraphs) {
+        Subgraph subgraph = m_this_graph.make_subgraph(vertexes, i++);
+        vertex_map.assign(DEPTH_OF_DEVISION, -1);
 
         if (VF2Recursive(vertex_map, subgraph, 0)) {
             founded++;
         }
     }
-    if (m_subgraphs.size() == 0) {
+    if (m_this_graph.m_subgraphs.size() == 0) {
         return -1;
     }
-    return static_cast<long double>(founded) / m_subgraphs.size();
+    return static_cast<long double>(founded) / m_this_graph.m_subgraphs.size();
 }
 }  // namespace apotheosis

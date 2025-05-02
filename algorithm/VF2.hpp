@@ -10,7 +10,8 @@ namespace apotheosis {
 
 class VF2 {
 private:
-    std::vector<Subgraph> &m_subgraphs;
+    Graph &m_this_graph;
+    // std::vector<Subgraph> &m_subgraphs;
     Graph &m_other_graph;
     std::vector<int> vertex_map;
 
@@ -27,8 +28,10 @@ private:
     );
 
 public:
-    VF2(std::vector<Subgraph> &subgraphs, Graph &other_graph)
-        : m_subgraphs(subgraphs), m_other_graph(other_graph), vertex_map(std::vector<int> (DEPTH_OF_DEVISION, -1)){};
+    VF2(Graph &this_graph, Graph &other_graph)
+        : m_this_graph(this_graph),
+          m_other_graph(other_graph),
+          vertex_map(std::vector<int>(DEPTH_OF_DEVISION, -1)){};
 
     void dfs();
     long double check();
