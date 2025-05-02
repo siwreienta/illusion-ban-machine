@@ -38,34 +38,32 @@ bool VF2::VF2Recursive(
         return true;
     }
 
-    if (vertex_map[u] == -1) {
-        std::string type = subgraph.vertex_table[u];
-        for (int v : m_other_graph.vertex_map[type]) {
-            if (find(begin(vertex_map), end(vertex_map), v) ==
-                    end(vertex_map) &&
-                check_connects(vertex_map, u, v, subgraph)) {
-                vertex_map[u] = v;
-                if (VF2Recursive(vertex_map, subgraph, u + 1)) {
-                    return true;
-                }
 
-                vertex_map[u] = -1;
+    std::string type = subgraph.vertex_table[u];
+    for (int v : m_other_graph.vertex_map[type]) {
+        if (find(begin(vertex_map), end(vertex_map), v) ==
+                end(vertex_map) &&
+            check_connects(vertex_map, u, v, subgraph)) {
+            vertex_map[u] = v;
+            if (VF2Recursive(vertex_map, subgraph, u + 1)) {
+                return true;
             }
+
+            vertex_map[u] = -1;
         }
     }
+    
 
     return false;
 }
 
-bool VF2::find_morph_subgraph(Subgraph &subgraph) {
-    std::vector<int> vertex_map(subgraph.m_V, -1);  // v_subg -> v_otherg
-    return VF2Recursive(vertex_map, subgraph, 0);
-}
 
 long double VF2::check() {
     int founded = 0;
     for (auto &subgraph : m_subgraphs) {
-        if (find_morph_subgraph(subgraph)) {
+    vertex_map.assign(DEPTH_OF_DEVISION, -1);
+
+        if (VF2Recursive(vertex_map, subgraph, 0)) {
             founded++;
         }
     }
