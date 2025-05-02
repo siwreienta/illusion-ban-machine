@@ -10,8 +10,8 @@ namespace apotheosis {
 
 class VF2 {
 private:
-    std::vector<Subgraph> m_subgraphs;
-    Graph m_other_graph;
+    std::vector<Subgraph> &m_subgraphs;
+    Graph &m_other_graph;
     std::vector<int> vertex_map;
 
     bool VF2Recursive(

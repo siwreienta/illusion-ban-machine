@@ -93,7 +93,7 @@ void Graph::make_subgraphs(int n, int last, std::vector<int> &taken_vertexes) {
 
 std::vector<Subgraph> &Graph::get_subgraphs() {
     if (m_subgraphs.empty()) {
-        m_subgraphs.reserve(15000);
+        m_subgraphs.reserve(50000);
         std::vector<int> taken_vertexes;
         taken_vertexes.reserve(DEPTH_OF_DEVISION + 1);
         for (int root = 0; root < m_V; root++) {

@@ -19,7 +19,7 @@ namespace apotheosis {
 
 long double check_two_graphs(std::string &fpath_1, std::string &fpath_2);
 
-const int DEPTH_OF_DEVISION = 5;
+const int DEPTH_OF_DEVISION = 7;
 
 template <class T>
 void print_vec(std::vector<T> &vec) {
@@ -33,7 +33,7 @@ void print_vec(std::vector<T> &vec) {
 class Subgraph;
 
 class Graph {
-public:
+private:
     int m_V;
     int m_E;
     std::string m_name;
@@ -70,14 +70,12 @@ public:
 class Subgraph : public Graph {
 private:
     std::vector<std::set<int>> m_reversed_edges;
-    void dfs(int v, std::vector<int> &used);
 
 public:
     friend class VF2;
     void add_vertex(std::string type);
     void add_edge(int v1, int v2);
     Subgraph(std::string name) : Graph(name){};
-    friend bool check_svyaznost(Subgraph &subgraph);
 };
 
 }  // namespace apotheosis
