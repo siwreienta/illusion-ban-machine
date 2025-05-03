@@ -6,8 +6,8 @@
 
 namespace apotheosis {
 
-struct not_a_grath : std::runtime_error {
-    not_a_grath(std::string filepath)
+struct not_a_graph : std::runtime_error {
+    not_a_graph(std::string filepath)
         : std::runtime_error("\"" + filepath + "\"" + " - это не граф!"){};
 };
 

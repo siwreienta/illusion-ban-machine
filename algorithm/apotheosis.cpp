@@ -33,7 +33,7 @@ void Graph::matrix_resize(int V) {
 }
 
 void Graph::end_read() {
-#ifdef APOTHEOSIS_DEBAG
+#ifdef APOTHEOSIS_DEBUG
     std::cout << this->m_name << "'s end_read()\n\n";
 #endif
     std::queue<int> queue;
@@ -97,7 +97,7 @@ void Graph::make_subgraphs(int n, int last, std::vector<int> &taken_vertexes) {
 }
 
 void Graph::devide_into_subgraphs() {
-#ifdef APOTHEOSIS_DEBAG
+#ifdef APOTHEOSIS_DEBUG
     std::cout << this->m_name << "'s devide_into_subgraphs()\n";
     auto start = std::chrono::steady_clock::now();
 #endif
@@ -112,7 +112,7 @@ void Graph::devide_into_subgraphs() {
             }
         }
     }
-#ifdef APOTHEOSIS_DEBAG
+#ifdef APOTHEOSIS_DEBUG
     std::cout << this->m_name
               << "'s m_subgraphs.size() = " << m_subgraphs.size() << '\n';
     auto end = std::chrono::steady_clock::now();
