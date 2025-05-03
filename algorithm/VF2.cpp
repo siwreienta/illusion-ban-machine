@@ -8,19 +8,19 @@ bool VF2::check_connects(
     int v,
     Subgraph &subgraph
 ) {
-    for (int u_predok : subgraph.m_reversed_edges[u]) {
-        if (vertex_map[u_predok] != -1) {
-            int v_predok = vertex_map[u_predok];
-            if (!m_other_graph.m_edges[v_predok].contains(v)) {
+    for (int u_dite : subgraph.m_edges[u]) {
+        if (vertex_map[u_dite] != -1) {
+            int v_dite = vertex_map[u_dite];
+            if (!m_other_graph.adjacency_matrix[v][v_dite]) {
                 return false;
             }
         }
     }
 
-    for (int u_dite : subgraph.m_edges[u]) {
-        if (vertex_map[u_dite] != -1) {
-            int v_dite = vertex_map[u_dite];
-            if (!m_other_graph.m_edges[v].contains(v_dite)) {
+    for (int u_predok : subgraph.m_reversed_edges[u]) {
+        if (vertex_map[u_predok] != -1) {
+            int v_predok = vertex_map[u_predok];
+            if (!m_other_graph.adjacency_matrix[v_predok][v]) {
                 return false;
             }
         }
@@ -46,8 +46,6 @@ bool VF2::VF2Recursive(
             if (VF2Recursive(vertex_map, subgraph, u + 1)) {
                 return true;
             }
-
-            vertex_map[u] = -1;
         }
     }
 

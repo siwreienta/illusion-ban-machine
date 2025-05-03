@@ -2,7 +2,7 @@
 
 namespace apotheosis {
 
-void Graph::add_vertex(std::string type) {
+void Graph::add_vertex(std::string &type) {
     vertex_map[type].push_back(m_V);
     vertex_table.push_back(type);
     m_roots.insert(m_V);
@@ -10,7 +10,7 @@ void Graph::add_vertex(std::string type) {
     m_edges.push_back({});
 }
 
-void Subgraph::add_vertex(std::string type) {
+void Subgraph::add_vertex(std::string &type) {
     Graph::add_vertex(type);
     m_reversed_edges.push_back({});
 }
@@ -19,15 +19,23 @@ void Graph::add_edge(int v1, int v2) {
     if (v1 != v2) {
         m_edges[v1].insert(v2);
         m_roots.erase(v2);
+        adjacency_matrix[v1][v2] = true;
     }
 }
 
 void Subgraph::add_edge(int v1, int v2) {
-    Graph::add_edge(v1, v2);
+    m_edges[v1].insert(v2);
     m_reversed_edges[v2].insert(v1);
 }
 
+void Graph::matrix_resize(int V) {
+    adjacency_matrix.resize(V, std::vector<bool>(V, false));
+}
+
 void Graph::end_read() {
+#ifdef APOTHEOSIS_DEBAG
+    std::cout << this->m_name << "'s end_read()\n\n";
+#endif
     std::queue<int> queue;
     m_dist.resize(m_V, 10000);
     for (auto root : m_roots) {
@@ -49,14 +57,14 @@ void Graph::end_read() {
     m_roots.clear();
 }
 
-Subgraph Graph::make_subgraph(const std::vector<int> vertexes, int number) {
+Subgraph Graph::make_subgraph(const std::vector<int> &vertexes, int number) {
     Subgraph result(this->m_name + "_subgraph_" + std::to_string(number));
     for (auto v : vertexes) {
         result.add_vertex(vertex_table[v]);
     }
     for (int i = 0; i < DEPTH_OF_DEVISION; i++) {
         for (int j = 0; j < DEPTH_OF_DEVISION; j++) {
-            if (m_edges[vertexes[i]].contains(vertexes[j])) {
+            if (adjacency_matrix[vertexes[i]][vertexes[j]]) {
                 result.add_edge(i, j);
             }
         }
@@ -89,8 +97,12 @@ void Graph::make_subgraphs(int n, int last, std::vector<int> &taken_vertexes) {
 }
 
 void Graph::devide_into_subgraphs() {
+#ifdef APOTHEOSIS_DEBAG
+    std::cout << this->m_name << "'s devide_into_subgraphs()\n";
+    auto start = std::chrono::steady_clock::now();
+#endif
     if (m_subgraphs.empty()) {
-        m_subgraphs.reserve(50000);
+        m_subgraphs.reserve(60000);
         std::vector<int> taken_vertexes;
         taken_vertexes.reserve(DEPTH_OF_DEVISION + 1);
         for (int root = 0; root < m_V; root++) {
@@ -100,10 +112,16 @@ void Graph::devide_into_subgraphs() {
             }
         }
     }
-    std::cout << "m_subgraphs.size() = " << m_subgraphs.size() << '\n';
+#ifdef APOTHEOSIS_DEBAG
+    std::cout << this->m_name
+              << "'s m_subgraphs.size() = " << m_subgraphs.size() << '\n';
+    auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    std::cout << "Деление заняло " << elapsed.count() << " секунд\n\n";
+#endif
 }
 
-Graph::Graph(std::string name) : m_V(0), m_E(0), m_name(name) {
+Graph::Graph(std::string name) : m_V(0), m_name(name) {
 }
 
 }  // namespace apotheosis

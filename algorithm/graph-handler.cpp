@@ -14,15 +14,34 @@ long double check_two_graphs(std::string &fpath_1, std::string &fpath_2) {
 }
 
 long double GraphHandler::check(int first_number, int second_number) {
+#ifdef APOTHEOSIS_DEBAG
+    std::cout << "check(" << first_number << ", " << second_number << ")\n\n";
+    auto start = std::chrono::steady_clock::now();
+#endif
     graphs[first_number].devide_into_subgraphs();
-
     graphs[second_number].devide_into_subgraphs();
-    return (VF2(graphs[first_number], graphs[second_number]).check() +
-            VF2(graphs[second_number], graphs[first_number]).check()) /
-           2;
+    long double res_1 =
+        VF2(graphs[first_number], graphs[second_number]).check();
+#ifdef APOTHEOSIS_DEBAG
+    auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    std::cout << "Первая проверка заняла " << elapsed.count() << " секунд\n";
+    start = std::chrono::steady_clock::now();
+#endif
+    long double res_2 =
+        VF2(graphs[second_number], graphs[first_number]).check();
+#ifdef APOTHEOSIS_DEBAG
+    end = std::chrono::steady_clock::now();
+    elapsed = end - start;
+    std::cout << "Вторая проверка заняла " << elapsed.count() << " секунд\n";
+#endif
+    return (res_1 + res_2) / 2;
 }
 
 void GraphHandler::read_graph(std::string &filepath) {
+#ifdef APOTHEOSIS_DEBAG
+    std::cout << "reading graph " << filepath << '\n';
+#endif
     std::ifstream is(filepath);
     if (!(is)) {
         throw unable_to_open(filepath);
@@ -41,6 +60,7 @@ void GraphHandler::read_graph(std::string &filepath) {
     if (!(is >> V >> E)) {
         throw bad_read();
     }
+    graph.matrix_resize(V);
 
     // Чтение вершин
     std::string vertex_name;
