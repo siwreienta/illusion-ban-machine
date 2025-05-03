@@ -62,8 +62,8 @@ Subgraph Graph::make_subgraph(const std::vector<int> &vertexes, int number) {
     for (auto v : vertexes) {
         result.add_vertex(vertex_table[v]);
     }
-    for (int i = 0; i < DEPTH_OF_DEVISION; i++) {
-        for (int j = 0; j < DEPTH_OF_DEVISION; j++) {
+    for (int i = 0; i < SUBGRAPH_SIZE; i++) {
+        for (int j = 0; j < SUBGRAPH_SIZE; j++) {
             if (adjacency_matrix[vertexes[i]][vertexes[j]]) {
                 result.add_edge(i, j);
             }
@@ -83,7 +83,7 @@ void Graph::make_subgraphs(int n, int last, std::vector<int> &taken_vertexes) {
         }
         if (i > last && m_dist[u] > m_dist[v]) {
             taken_vertexes.push_back(u);
-            if (taken_vertexes.size() == DEPTH_OF_DEVISION) {
+            if (taken_vertexes.size() == SUBGRAPH_SIZE) {
                 m_subgraphs.push_back(taken_vertexes);
             } else {
                 make_subgraphs(n, i, taken_vertexes);
@@ -104,7 +104,7 @@ void Graph::devide_into_subgraphs() {
     if (m_subgraphs.empty()) {
         m_subgraphs.reserve(60000);
         std::vector<int> taken_vertexes;
-        taken_vertexes.reserve(DEPTH_OF_DEVISION + 1);
+        taken_vertexes.reserve(SUBGRAPH_SIZE + 1);
         for (int root = 0; root < m_V; root++) {
             if (m_dist[root]) {
                 taken_vertexes.assign(1, root);

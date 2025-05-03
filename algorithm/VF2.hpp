@@ -30,7 +30,7 @@ public:
     VF2(Graph &this_graph, Graph &other_graph)
         : m_this_graph(this_graph),
           m_other_graph(other_graph),
-          vertex_map(std::vector<int>(DEPTH_OF_DEVISION, -1)){};
+          vertex_map(std::vector<int>(SUBGRAPH_SIZE, -1)){};
 
     long double check();
 };

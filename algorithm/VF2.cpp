@@ -58,7 +58,7 @@ long double VF2::check() {
     int i = 0;
     for (auto &vertexes : m_this_graph.m_subgraphs) {
         Subgraph subgraph = m_this_graph.make_subgraph(vertexes, i++);
-        vertex_map.assign(DEPTH_OF_DEVISION, -1);
+        vertex_map.assign(SUBGRAPH_SIZE, -1);
 
         if (VF2Recursive(vertex_map, subgraph, 0)) {
             founded++;
