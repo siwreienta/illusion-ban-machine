@@ -24,7 +24,7 @@ namespace apotheosis {
 
 long double check_two_graphs(std::string &fpath_1, std::string &fpath_2);
 
-const int DEPTH_OF_DEVISION = 7;
+constexpr int DEPTH_OF_DEVISION = 7;
 
 class Subgraph;
 

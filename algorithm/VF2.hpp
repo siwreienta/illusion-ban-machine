@@ -11,20 +11,19 @@ namespace apotheosis {
 class VF2 {
 private:
     Graph &m_this_graph;
-    // std::vector<Subgraph> &m_subgraphs;
     Graph &m_other_graph;
     std::vector<int> vertex_map;
 
     bool VF2Recursive(
         std::vector<int> &vertex_sootvetstvie,
-        Subgraph &subgraph,
+        const Subgraph &subgraph,
         int M_counter
     );
     bool check_connects(
         const std::vector<int> &vertex_sootvetstvie,
         int u,
         int v,
-        Subgraph &subgraph
+        const Subgraph &subgraph
     );
 
 public:
@@ -33,7 +32,6 @@ public:
           m_other_graph(other_graph),
           vertex_map(std::vector<int>(DEPTH_OF_DEVISION, -1)){};
 
-    void dfs();
     long double check();
 };
 

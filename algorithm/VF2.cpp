@@ -6,7 +6,7 @@ bool VF2::check_connects(
     const std::vector<int> &vertex_map,
     int u,
     int v,
-    Subgraph &subgraph
+    const Subgraph &subgraph
 ) {
     for (int u_dite : subgraph.m_edges[u]) {
         if (vertex_map[u_dite] != -1) {
@@ -31,7 +31,7 @@ bool VF2::check_connects(
 
 bool VF2::VF2Recursive(
     std::vector<int> &vertex_map,
-    Subgraph &subgraph,
+    const Subgraph &subgraph,
     int u
 ) {
     if (subgraph.m_V == u) {
@@ -46,6 +46,7 @@ bool VF2::VF2Recursive(
             if (VF2Recursive(vertex_map, subgraph, u + 1)) {
                 return true;
             }
+            vertex_map[u] = -1;
         }
     }
 
