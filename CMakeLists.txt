@@ -7,17 +7,26 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 option(BUILD_SERVER "Build the server target" ON)
 option(BUILD_ALGORITHM "Build the algorithm target" ON)
+option(BUILD_DEBUG "Build the algorithm target" ON)
+
 
 include(default-options.cmake)
 
+if (BUILD_DEBUG)
+    add_definitions(-DAPOTHEOSIS_DEBUG)
+endif()
+
 if (BUILD_ALGORITHM)
     add_executable(${PROJECT_NAME}_algorithm algorithm/main.cpp algorithm/graph-handler.cpp algorithm/apotheosis.cpp algorithm/interpreter.cpp algorithm/VF2.cpp)
+    set_target_properties(${PROJECT_NAME}_algorithm PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
 endif()
 
 if (BUILD_SERVER)
     list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/server/cmake")
     include(DownloadUserver)
-    find_package(userver COMPONENTS core QUIET)
+    find_package(userver COMPONENTS core postgresql QUIET)
     if(NOT userver_FOUND)
       # Tries TRY_DIR first, falls back to downloading userver from GitHub using CPM.
       download_userver(TRY_DIR third_party/userver)
@@ -31,7 +40,7 @@ if (BUILD_SERVER)
         server/src/server.cpp
     )
 
-    target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::core)
+    target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::core userver::postgresql)
 
 
     find_package(PkgConfig REQUIRED)
