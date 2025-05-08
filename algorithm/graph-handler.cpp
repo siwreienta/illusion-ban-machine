@@ -38,7 +38,7 @@ long double GraphHandler::check(int first_number, int second_number) {
     return (res_1 + res_2) / 2;
 }
 
-void GraphHandler::read_graph(std::string &filepath) {
+void GraphHandler::read_graph(std::string filepath) {
 #ifdef APOTHEOSIS_DEBUG
     std::cout << "reading graph " << filepath << '\n';
 #endif
