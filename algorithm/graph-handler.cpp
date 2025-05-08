@@ -6,32 +6,61 @@
 
 namespace apotheosis {
 
-void GraphHandler::privet() {
-    std::cout << "Привет, сокомандники!\nZZZZZ\n";
-}
-
-void GraphHandler::add_graph(Graph graph) {
-    graphs.push_back(graph);
+long double check_two_graphs(std::string &fpath_1, std::string &fpath_2) {
+    GraphHandler gh;
+    gh.read_graph(fpath_1);
+    gh.read_graph(fpath_2);
+    return gh.check(0, 1);
 }
 
 long double GraphHandler::check(int first_number, int second_number) {
-    std::vector<Subgraph> subgraphs =
-        graphs[first_number].devide_into_subgraphs();
-    VF2 vf2(subgraphs, graphs[second_number]);
-    return vf2.check();
+#ifdef APOTHEOSIS_DEBUG
+    std::cout << "check(" << first_number << ", " << second_number << ")\n\n";
+    auto start = std::chrono::steady_clock::now();
+#endif
+    graphs[first_number].devide_into_subgraphs();
+    graphs[second_number].devide_into_subgraphs();
+    long double res_1 =
+        VF2(graphs[first_number], graphs[second_number]).check();
+#ifdef APOTHEOSIS_DEBUG
+    auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    std::cout << "Первая проверка заняла " << elapsed.count() << " секунд\n";
+    start = std::chrono::steady_clock::now();
+#endif
+    long double res_2 =
+        VF2(graphs[second_number], graphs[first_number]).check();
+#ifdef APOTHEOSIS_DEBUG
+    end = std::chrono::steady_clock::now();
+    elapsed = end - start;
+    std::cout << "Вторая проверка заняла " << elapsed.count() << " секунд\n";
+#endif
+    return (res_1 + res_2) / 2;
 }
 
-Graph GraphHandler::read_graph(std::string &name, std::ifstream &is) {
-    Graph graph(name);
+void GraphHandler::read_graph(std::string filepath) {
+#ifdef APOTHEOSIS_DEBUG
+    std::cout << "reading graph " << filepath << '\n';
+#endif
+    std::ifstream is(filepath);
+    if (!(is)) {
+        throw unable_to_open(filepath);
+    }
 
-    // Подразумеваю, что вершины будут хорошо переименованы, пока нет нужна мапа
-    std::unordered_map<std::string, int> vertex_map;
+    std::string key;
+    std::string name;
+    if (!(is >> key >> name) || key != "digraph") {
+        throw not_a_graph(filepath);
+    }
+
+    Graph graph(name);
 
     int V = 0;  // Количество вершин
     int E = 0;  // Количество ребер
     if (!(is >> V >> E)) {
         throw bad_read();
     }
+    graph.matrix_resize(V);
 
     // Чтение вершин
     std::string vertex_name;
@@ -41,22 +70,20 @@ Graph GraphHandler::read_graph(std::string &name, std::ifstream &is) {
         if (!(is >> vertex_name >> vertex_type)) {
             throw bad_read();
         }
-        vertex_map[vertex_name] = i;
         graph.add_vertex(vertex_type);
     }
 
     // В дальнейшем должны быть инты, дабы не костылить
-    std::string vertex_1_name;
-    std::string vertex_2_name;
+    int v1 = 0;
+    int v2 = 0;
     for (int i = 0; i < E; i++) {
-        if (!(is >> vertex_1_name >> vertex_2_name)) {
+        if (!(is >> v1 >> v2)) {
             throw bad_read();
         }
-        int v1 = vertex_map[vertex_1_name];
-        int v2 = vertex_map[vertex_2_name];
         graph.add_edge(v1, v2);
     }
-    return graph;
+    graph.end_read();
+    graphs.push_back(std::move(graph));
 }
 
 }  // namespace apotheosis

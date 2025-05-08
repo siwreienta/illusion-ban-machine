@@ -11,9 +11,7 @@ private:
     std::vector<Graph> graphs;
 
 public:
-    void privet();
-    static Graph read_graph(std::string &name, std::ifstream &is);
-    void add_graph(Graph graph);
+    void read_graph(std::string filepath);
 
     int size() {
         return static_cast<int>(graphs.size());
