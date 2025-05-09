@@ -27,7 +27,7 @@ if(BUILD_ALGORITHM)
         ${ALGORITHM_EXEC}
     )
     set_target_properties(${PROJECT_NAME}_algorithm PROPERTIES
-        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}
     )
 endif()
 

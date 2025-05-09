@@ -2,14 +2,13 @@
 #include <fmt/format.h>
 #include <fstream>
 #include <functional>
+#include <pqxx/pqxx>
 #include <userver/server/handlers/http_handler_base.hpp>
 #include <userver/server/handlers/http_handler_static.hpp>
 #include <userver/server/http/http_response_body_stream.hpp>
-#include "../../joern_parse/input-parcer.hpp"
-#include "../../database/database.hpp"
 #include "../../algorithm/apotheosis.hpp"
-#include <pqxx/pqxx>
-
+#include "../../database/database.hpp"
+#include "../../joern_parse/input-parcer.hpp"
 
 namespace apotheosis {
 
@@ -27,8 +26,7 @@ public:
         const override {
         auto &response = request.GetHttpResponse();
         response.SetContentType("text/html");
-        apotheosis::database DB; // TODO: change default constructor
-        DB.add_user("HUI");
+        apotheosis::database DB;  // TODO: change default constructor
 
         return R"(<html>
             <head>

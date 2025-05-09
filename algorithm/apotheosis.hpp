@@ -1,7 +1,7 @@
 #ifndef APOTHEOSIS_HPP_
 #define APOTHEOSIS_HPP_
 
-#define APOTHEOSIS_DEBUG
+// #define APOTHEOSIS_DEBUG
 #ifdef APOTHEOSIS_DEBUG
 #include <chrono>
 #endif
