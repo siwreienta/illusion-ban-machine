@@ -20,19 +20,6 @@ components_manager:
       method: GET
       path: /
       task_processor: main-task-processor
-    handler-hello:                    # Finally! Our handler.
-      path: /v1/hello               # Registering handler by URL '/v1/hello'.
-      method: GET                  # It will only reply to POST requests.
-      task_processor: main-task-processor  # Run it on CPU bound task processor
-
-    postgres-db-1:
-      dbconnection: $dbconnection
-      dbconnection#env: DB_CONNECTION
-      blocking_task_processor: fs-task-processor
-      dns_resolver: async
-      sync-start: true
-      connlimit_mode: manual
-
     handler-ping:
       method: GET
       path: /ping
