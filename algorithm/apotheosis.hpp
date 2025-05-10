@@ -1,7 +1,7 @@
 #ifndef APOTHEOSIS_HPP_
 #define APOTHEOSIS_HPP_
 
-#define APOTHEOSIS_DEBUG
+// #define APOTHEOSIS_DEBUG
 #ifdef APOTHEOSIS_DEBUG
 #include <chrono>
 #endif
@@ -22,7 +22,7 @@
 
 namespace apotheosis {
 
-long double check_two_graphs(std::string &fpath_1, std::string &fpath_2);
+long double check_two_graphs(const std::string &fpath_1, const std::string &fpath_2);
 
 constexpr int SUBGRAPH_SIZE = 7;
 

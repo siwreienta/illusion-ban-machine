@@ -6,7 +6,7 @@
 
 namespace apotheosis {
 
-long double check_two_graphs(std::string &fpath_1, std::string &fpath_2) {
+long double check_two_graphs(const std::string &fpath_1, const std::string &fpath_2) {
     GraphHandler gh;
     gh.read_graph(fpath_1);
     gh.read_graph(fpath_2);

@@ -7,12 +7,9 @@
 
 namespace apotheosis {
 
-std::string CheckStatus();
-std::string LoadCodes();
-
-void AppendCheckStatus(userver::components::ComponentList &component_list);
 void AppendLoadCodes(userver::components::ComponentList &component_list);
 void AppendMainPage(userver::components::ComponentList &component_list);
+void AppendLoadCodePage(userver::components::ComponentList &component_list);
 
 }  // namespace apotheosis
 #endif

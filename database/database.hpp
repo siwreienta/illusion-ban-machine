@@ -26,7 +26,7 @@ private:
 
 public:
     explicit database() 
-    : conn_("host=localhost dbname=apotheosis user=sofa password=w8uSZJZo") {
+    : conn_("host=localhost dbname=apotheosis user=siwreienta password=mimimamomu") {
     if (!conn_.is_open()) {
         throw database_errors("База данных не открылась");
     }
