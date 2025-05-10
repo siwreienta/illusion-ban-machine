@@ -10,7 +10,7 @@ mkdir -p $BUILD_DIR
 
 echo "Собираем лучший проект..."
 cd $BUILD_DIR
-cmake -DBUILD_ALGORITHM=OFF -DBUILD_SERVER=ON -DBUILD_DEBUG=OFF ..
+cmake -DBUILD_ALGORITHM=OFF -DBUILD_SERVER=ON -DBUILD_DEBUG=ON ..
 make -j$(nproc)
 
 echo "Обновляем список табличек"

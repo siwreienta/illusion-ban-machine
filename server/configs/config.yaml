@@ -8,13 +8,13 @@ components_manager:
     dynamic-config:
       defaults:
         HTTP_CLIENT_CONNECTION_POOL_SIZE: 1000
-    handler-load-code:
-      method: GET,POST
+    handler-load-code-page:
+      method: GET
       path: /load-code
       task_processor: main-task-processor
-    handler-check-status:
-      method: GET,POST
-      path: /check-status
+    handler-load-code:
+      method: POST
+      path: /load-code
       task_processor: main-task-processor
     handler-main-page:
       method: GET
