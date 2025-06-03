@@ -14,8 +14,10 @@ int main() {
     // std::cout<< "Чек _ и 1a: "<<apotheosis::check_two_graphs(output_, output1a)<<'\n';
     // std::cout<< "Чек 2a и 1a: "<<apotheosis::check_two_graphs(output2a, output1a)<<'\n';
     // std::cout<< "Чек _ и 2a: "<<apotheosis::check_two_graphs("output.dot", "output2a.dot")<<'\n';
-    auto res = apotheosis::check_two_graphs(output_, output_);
-    std::cout<< "Чек _ и _: "<<res<<'\n';
+    auto res = apotheosis::check_two_graphs(output1a, output2a);
+    std::cout<< "Чек new: "<<res<<'\n';
+    res = apotheosis::check_two_graphs_old(output1a, output2a);
+    std::cout<< "Чек old: "<<res<<'\n';
 
     std::cout << "Я отработал!\n";
     return 0;

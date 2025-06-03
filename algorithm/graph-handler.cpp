@@ -6,11 +6,28 @@
 
 namespace apotheosis {
 
-long double check_two_graphs(std::string &fpath_1, std::string &fpath_2) {
+long double check_two_graphs(const std::string &fpath_1, const std::string &fpath_2) {
     GraphHandler gh;
     gh.read_graph(fpath_1);
     gh.read_graph(fpath_2);
     return gh.check(0, 1);
+}
+
+long double check_two_graphs_old(const std::string &fpath_1, const std::string &fpath_2) {
+    GraphHandler gh;
+    gh.read_graph(fpath_1);
+    gh.read_graph(fpath_2);
+    return gh.check_old(0, 1);
+}
+
+long double GraphHandler::check_old(int first_number, int second_number) {
+    graphs[first_number].make_subgraphs_old();
+    graphs[second_number].make_subgraphs_old();
+    long double res_1 =
+        VF2(graphs[first_number], graphs[second_number]).check();
+    long double res_2 =
+        VF2(graphs[second_number], graphs[first_number]).check();
+    return (res_1 + res_2) / 2;
 }
 
 long double GraphHandler::check(int first_number, int second_number) {

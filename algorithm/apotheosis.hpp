@@ -1,7 +1,7 @@
 #ifndef APOTHEOSIS_HPP_
 #define APOTHEOSIS_HPP_
 
-#define APOTHEOSIS_DEBUG
+// #define APOTHEOSIS_DEBUG
 #ifdef APOTHEOSIS_DEBUG
 #include <chrono>
 #endif
@@ -22,9 +22,10 @@
 
 namespace apotheosis {
 
-long double check_two_graphs(std::string &fpath_1, std::string &fpath_2);
+long double check_two_graphs(const std::string &fpath_1, const std::string &fpath_2);
+long double check_two_graphs_old(const std::string &fpath_1, const std::string &fpath_2);
 
-constexpr int SUBGRAPH_SIZE = 7;
+constexpr int SUBGRAPH_SIZE = 5;
 
 class Subgraph;
 
@@ -47,6 +48,8 @@ protected:
 
     Subgraph make_subgraph(const std::vector<int> &vertexes, int number);
     void make_subgraphs(int n, int last, std::vector<int> &taken_vertexes);
+    std::vector<int> bfs(int root);
+    void make_subgraphs_and_put_into_vector(int root, std::set<std::vector<int>> &est_li);
 
 public:
     friend class VF2;
@@ -56,15 +59,16 @@ public:
     void start_read(int V);
     void end_read();
     void matrix_resize(int V);
+    void make_subgraphs_old();
     Graph(std::string name);
 };
 
 class Subgraph : public Graph {
 private:
     std::vector<std::set<int>> m_reversed_edges;
-
 public:
     friend class VF2;
+    void dfs(int v, std::vector<int> &used);
     void add_vertex(std::string &type);
     void add_edge(int v1, int v2);
     Subgraph(std::string name) : Graph(name){};

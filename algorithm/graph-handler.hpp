@@ -18,6 +18,7 @@ public:
     }
 
     long double check(int first_number, int second_number);
+    long double check_old(int first_number, int second_number);
 };
 
 }  // namespace apotheosis
