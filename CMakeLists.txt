@@ -7,17 +7,26 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 option(BUILD_SERVER "Build the server target" ON)
 option(BUILD_ALGORITHM "Build the algorithm target" ON)
+option(BUILD_DEBUG "Debug mode" ON)
+
 
 include(default-options.cmake)
 
+if (BUILD_DEBUG)
+    add_definitions(-DAPOTHEOSIS_DEBUG)
+endif()
+
 if (BUILD_ALGORITHM)
-    add_executable(${PROJECT_NAME}_algorithm algorithm/main.cpp algorithm/graph-handler.cpp algorithm/apotheosis.cpp algorithm/VF2.cpp)
+    add_executable(${PROJECT_NAME}_algorithm algorithm/main.cpp algorithm/graph-handler.cpp algorithm/apotheosis.cpp algorithm/interpreter.cpp algorithm/VF2.cpp)
+    set_target_properties(${PROJECT_NAME}_algorithm PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
 endif()
 
 if (BUILD_SERVER)
     list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/server/cmake")
     include(DownloadUserver)
-    find_package(userver COMPONENTS core QUIET)
+    find_package(userver COMPONENTS core postgresql QUIET)
     if(NOT userver_FOUND)
       # Tries TRY_DIR first, falls back to downloading userver from GitHub using CPM.
       download_userver(TRY_DIR third_party/userver)
@@ -25,13 +34,12 @@ if (BUILD_SERVER)
 
     userver_setup_environment()
 
-    # Common sources
     add_library(${PROJECT_NAME}_objs OBJECT
         server/src/server.hpp
         server/src/server.cpp
     )
 
-    target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::core)
+    target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::core userver::postgresql)
 
 
     find_package(PkgConfig REQUIRED)
@@ -39,30 +47,8 @@ if (BUILD_SERVER)
     pkg_check_modules(RE2 REQUIRED libre2)
 
 
-    # The Service
     add_executable(${PROJECT_NAME}_server server/src/main.cpp joern_parse/input-parcer.cpp algorithm/graph-handler.cpp algorithm/apotheosis.cpp algorithm/interpreter.cpp algorithm/VF2.cpp)
     target_link_libraries(${PROJECT_NAME}_server PRIVATE ${PROJECT_NAME}_objs ${RE2_LIBRARIES} icuuc)
-
-
-    # Unit Tests
-    # add_executable(${PROJECT_NAME}_unittest
-    #     server/src/server_test.cpp
-    # )
-    # target_link_libraries(${PROJECT_NAME}_unittest PRIVATE ${PROJECT_NAME}_objs userver::utest ${RE2_LIBRARIES} icuuc)
-    # add_google_tests(${PROJECT_NAME}_unittest)
-
-
-    # Functional testing
-    # userver_testsuite_add_simple()
-
-    # userver_testsuite_add(
-    #     NAME ${PROJECT_NAME}_testsuite
-    #     SERVICE_TARGET ${PROJECT_NAME}_server
-    #     TEST_SOURCES
-    #         tests/functional/test_basic.cpp
-    # )
-
-    # Install
 
     include_directories(${RE2_INCLUDE_DIRS})
     link_directories(${RE2_LIBRARY_DIRS})
