@@ -2,6 +2,7 @@
 
 namespace apotheosis {
 
+
 void Graph::add_vertex(std::string &type) {
     vertex_map[type].push_back(m_V);
     vertex_table.push_back(type);
@@ -38,19 +39,24 @@ void Graph::end_read() {
 #endif
     std::queue<int> queue;
     m_dist.resize(m_V, 10000);
+    std::vector<int> used(m_V,0);
     for (auto root : m_roots) {
         m_dist[root] = 0;
+        used[root] = 1;
         queue.push(root);
     }
 
     while (!queue.empty()) {
         int current = queue.front();
         queue.pop();
+        used[current] = 0;
 
         for (int neighbor : m_edges[current]) {
             if (m_dist[neighbor] > m_dist[current] + 1) {
                 m_dist[neighbor] = m_dist[current] + 1;
-                queue.push(neighbor);
+                if(used[neighbor]==0)
+                {queue.push(neighbor);
+                used[neighbor]=1;}
             }
         }
     }
@@ -81,10 +87,13 @@ void Graph::make_subgraphs(int n, int last, std::vector<int> &taken_vertexes) {
                 goto end_of_iteration;
             }
         }
-        if (i > last && m_dist[u] > m_dist[v]) {
+        if (i > last && m_dist[u] >= m_dist[v]) {
             taken_vertexes.push_back(u);
             if (taken_vertexes.size() == SUBGRAPH_SIZE) {
-                m_subgraphs.push_back(taken_vertexes);
+                auto hash =vector_hash(taken_vertexes);
+                if (!est_li.contains(hash)){
+                    est_li[hash] = true;
+                m_subgraphs.push_back(taken_vertexes);}
             } else {
                 make_subgraphs(n, i, taken_vertexes);
                 make_subgraphs(n + 1, -1, taken_vertexes);
@@ -97,12 +106,12 @@ void Graph::make_subgraphs(int n, int last, std::vector<int> &taken_vertexes) {
 }
 
 void Graph::devide_into_subgraphs() {
-#ifdef APOTHEOSIS_DEBUG
-    std::cout << this->m_name << "'s devide_into_subgraphs()\n";
-    auto start = std::chrono::steady_clock::now();
-#endif
     if (m_subgraphs.empty()) {
-        m_subgraphs.reserve(60000);
+#ifdef APOTHEOSIS_DEBUG
+        std::cout << this->m_name << "'s devide_into_subgraphs()\n";
+        auto start = std::chrono::steady_clock::now();
+#endif
+
         std::vector<int> taken_vertexes;
         taken_vertexes.reserve(SUBGRAPH_SIZE + 1);
         for (int root = 0; root < m_V; root++) {
@@ -111,14 +120,19 @@ void Graph::devide_into_subgraphs() {
                 make_subgraphs(0, -1, taken_vertexes);
             }
         }
-    }
+
+        if (m_subgraphs.size() < 100) {
+            devide_into_subgraphs_full();
+        }
 #ifdef APOTHEOSIS_DEBUG
-    std::cout << this->m_name
-              << "'s m_subgraphs.size() = " << m_subgraphs.size() << '\n';
-    auto end = std::chrono::steady_clock::now();
-    std::chrono::duration<double> elapsed = end - start;
-    std::cout << "Деление заняло " << elapsed.count() << " секунд\n\n";
+        std::cout << this->m_name
+                  << "'s m_subgraphs.size() = " << m_subgraphs.size() << '\n';
+        auto end = std::chrono::steady_clock::now();
+        std::chrono::duration<double> elapsed = end - start;
+        std::cout << "Деление заняло " << elapsed.count() << " секунд\n\n";
 #endif
+    }
+    est_li.clear();
 }
 
 Graph::Graph(std::string name) : m_V(0), m_name(name) {
