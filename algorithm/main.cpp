@@ -14,8 +14,24 @@ int main() {
     // std::cout<< "Чек _ и 1a: "<<apotheosis::check_two_graphs(output_, output1a)<<'\n';
     // std::cout<< "Чек 2a и 1a: "<<apotheosis::check_two_graphs(output2a, output1a)<<'\n';
     // std::cout<< "Чек _ и 2a: "<<apotheosis::check_two_graphs("output.dot", "output2a.dot")<<'\n';
-    auto res = apotheosis::check_two_graphs(output_, output_);
-    std::cout<< "Чек _ и _: "<<res<<'\n';
+    // auto res = apotheosis::check_two_graphs(output_, output_);
+    // std::cout<< "Чек new: "<<res<<'\n';
+    // res = apotheosis::check_two_graphs_old(output_, output_);
+    // std::cout<< "Чек old: "<<res<<'\n';
+
+    // for (int i = 4; i<=12;i++){
+    //     for (int j = i+1; j<=12; j++){
+    //         std::string first = "joern_work_folder/results/"+std::to_string(i)+".dot";
+    //         std::string second = "joern_work_folder/results/"+std::to_string(j)+".dot";
+    //         std::cout<<i<<" "<<j<<std::endl;
+    //         auto res = apotheosis::check_two_graphs(first, second);
+    // std::cout<< "Чек new: "<<res<<'\n';
+    // res = apotheosis::check_two_graphs_old(first, second);
+    // std::cout<< "Чек old: "<<res<<'\n';
+            
+    //     }
+    // }
+    apotheosis::check_all_in_dir("joern_work_folder/results");
 
     std::cout << "Я отработал!\n";
     return 0;
