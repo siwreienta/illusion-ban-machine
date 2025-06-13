@@ -24,7 +24,7 @@ namespace apotheosis {
 
 long double check_two_graphs(const std::string &fpath_1, const std::string &fpath_2);
 long double check_two_graphs_old(const std::string &fpath_1, const std::string &fpath_2);
-void check_all_in_dir(const std::string &dir_path);
+std::vector<std::vector<long double>> check_all_in_dir(const std::string &dir_path);
 
 constexpr int SUBGRAPH_SIZE = 7;
 

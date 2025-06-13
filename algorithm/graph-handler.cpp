@@ -10,7 +10,7 @@ void GraphHandler::sort() {
     std::sort(graphs.begin(), graphs.end());
 }
 
-void check_all_in_dir(const std::string &dir_path) {
+std::vector<std::vector<long double>> check_all_in_dir(const std::string &dir_path) {
     GraphHandler gh;
     for (const auto &dir_entry :
          std::filesystem::directory_iterator(dir_path)) {
@@ -20,9 +20,10 @@ void check_all_in_dir(const std::string &dir_path) {
         }
     }
     gh.sort();
+    std::vector<std::vector<long double>> res(gh.size(), std::vector<long double>(gh.size(), 0));
     for (int i = 0; i < gh.size(); i++) {
         for (int j = i + 1; j < gh.size(); j++) {
-            std::cout << i << " " << j << " " << gh.check(i, j) << std::endl;
+            res[i][j] = gh.check(i, j);
         }
     }
 }
