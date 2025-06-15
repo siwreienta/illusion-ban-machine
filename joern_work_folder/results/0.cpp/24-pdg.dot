@@ -1,0 +1,8 @@
+digraph "readWord" {  
+node [shape="rect"];  
+"111669149720" [label = <METHOD<BR/>readWord> ]
+"128849018904" [label = <METHOD_RETURN<BR/>ANY> ]
+"115964117025" [label = <PARAM<BR/>p1> ]
+  "115964117025" -> "128849018904"  [ label = "DDG: p1"] 
+  "111669149720" -> "115964117025"  [ label = "DDG: "] 
+}

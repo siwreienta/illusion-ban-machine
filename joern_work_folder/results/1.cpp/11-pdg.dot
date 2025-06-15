@@ -1,0 +1,8 @@
+digraph "&lt;operator&gt;.logicalNot" {  
+node [shape="rect"];  
+"111669149707" [label = <METHOD<BR/>&lt;operator&gt;.logicalNot> ]
+"128849018891" [label = <METHOD_RETURN<BR/>ANY> ]
+"115964117004" [label = <PARAM<BR/>p1> ]
+  "115964117004" -> "128849018891"  [ label = "DDG: p1"] 
+  "111669149707" -> "115964117004"  [ label = "DDG: "] 
+}

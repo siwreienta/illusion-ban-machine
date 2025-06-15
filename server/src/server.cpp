@@ -67,7 +67,21 @@ public:
         resp.SetContentType("text/html; charset=utf-8");  // SORRY
         return R"__(<!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"><title>Upload Code</title></head>
+<head><meta charset="utf-8"><title>Upload Code</title>
+<style>
+                    body { font-family: Arial, sans-serif; margin: 40px; }
+                    h1 { color: #333; }
+                    a { display: inline-block; margin: 10px; padding: 10px 20px; 
+                        background: #4CAF50; color: white; text-decoration: none; 
+                        border-radius: 5px; }
+                    a:hover { background: #45a049; }
+                    button { display: inline-block; margin: 10px; padding: 10px 20px; 
+                        background: #4CAF50; color: white; text-decoration: none; 
+                        border-radius: 5px; }
+                    button:hover { background: #45a049; }
+                    form { margin: 20px 0; }
+                    textarea { width: 100%; height: 200px; }
+                </style></head>
 <body>
   <h1>Да начнется суд! (пожалуйста, не стоит много раз тыкать на кнопку "проверить", запаситесь терпением)</h1>
   <form id="code-form">
@@ -135,6 +149,7 @@ public:
         int solution_id_1 = db_connect.load_code(user_1, task, contest, code_1);
         int solution_id_2 = db_connect.load_code(user_2, task, contest, code_2);
         const std::string buffer_dir = "../joern_work_folder/buffer/";
+        const std::string result_dir = "../joern_work_folder/results/";
         const std::string buffer_1 = buffer_dir + "0.cpp";
         const std::string buffer_2 = buffer_dir + "1.cpp";
         std::ofstream buffer_ostream_1(buffer_1, std::ios::binary);
@@ -142,9 +157,18 @@ public:
         std::ofstream buffer_ostream_2(buffer_2, std::ios::binary);
         buffer_ostream_2 << code_2;
         graph_maker::joern_graph_maker joern_parser;
-        graph_maker::files_stack file_stack("../joern_work_folder/buffer");
-        joern_parser.clear_directory("../joern_work_folder/results");
+        graph_maker::files_stack file_stack(buffer_dir);
+        joern_parser.clear_directory(result_dir);
         joern_parser.make_graph(file_stack);
+        const std::string result_1 = result_dir + "0.cpp";
+        const std::string result_2 = result_dir + "1.cpp";
+        std::ifstream result_istream_1(result_1);
+        std::ifstream result_istream_2(result_2);
+        std::string graph_1, graph_2;
+        result_istream_1 >> graph_1;
+        result_istream_2 >> graph_2;
+        int graph_id_1 = db_connect.load_graph(solution_id_1, graph_1);
+        int graph_id_2 = db_connect.load_graph(solution_id_2, graph_2);        
 #ifdef APOTHEOSIS_DEBUG
         std::cout << "Ура, графы были успешно загружены в систему\n";
 #endif

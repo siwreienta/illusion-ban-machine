@@ -18,6 +18,7 @@ include(default-options.cmake)
 set(ALGORITHM_EXEC
     algorithm/graph-handler.cpp
     algorithm/apotheosis.cpp
+    algorithm/apotheosis_old.cpp
     algorithm/VF2.cpp
 )
 
