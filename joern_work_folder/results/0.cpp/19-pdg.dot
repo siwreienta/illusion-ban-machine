@@ -1,8 +1,0 @@
-digraph "&lt;operator&gt;.constructorInitializer" {  
-node [shape="rect"];  
-"111669149715" [label = <METHOD<BR/>&lt;operator&gt;.constructorInitializer> ]
-"128849018899" [label = <METHOD_RETURN<BR/>ANY> ]
-"115964117019" [label = <PARAM<BR/>p1> ]
-  "115964117019" -> "128849018899"  [ label = "DDG: p1"] 
-  "111669149715" -> "115964117019"  [ label = "DDG: "] 
-}

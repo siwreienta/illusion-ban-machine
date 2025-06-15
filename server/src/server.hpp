@@ -10,6 +10,7 @@ namespace apotheosis {
 void AppendLoadCodes(userver::components::ComponentList &component_list);
 void AppendMainPage(userver::components::ComponentList &component_list);
 void AppendLoadCodePage(userver::components::ComponentList &component_list);
+void AppendManyCheck(userver::components::ComponentList &component_list);
 
 }  // namespace apotheosis
 #endif

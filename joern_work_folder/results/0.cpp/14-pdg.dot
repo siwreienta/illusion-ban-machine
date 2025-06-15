@@ -1,8 +1,0 @@
-digraph "seekEof" {  
-node [shape="rect"];  
-"111669149710" [label = <METHOD<BR/>seekEof> ]
-"128849018894" [label = <METHOD_RETURN<BR/>ANY> ]
-"115964117012" [label = <PARAM<BR/>p0> ]
-  "115964117012" -> "128849018894"  [ label = "DDG: p0"] 
-  "111669149710" -> "115964117012"  [ label = "DDG: "] 
-}

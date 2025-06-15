@@ -1,8 +1,0 @@
-digraph "&lt;operator&gt;.preDecrement" {  
-node [shape="rect"];  
-"111669149717" [label = <METHOD<BR/>&lt;operator&gt;.preDecrement> ]
-"128849018901" [label = <METHOD_RETURN<BR/>ANY> ]
-"115964117017" [label = <PARAM<BR/>p1> ]
-  "115964117017" -> "128849018901"  [ label = "DDG: p1"] 
-  "111669149717" -> "115964117017"  [ label = "DDG: "] 
-}

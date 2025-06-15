@@ -1,8 +1,0 @@
-digraph "next" {  
-node [shape="rect"];  
-"111669149704" [label = <METHOD<BR/>next> ]
-"128849018888" [label = <METHOD_RETURN<BR/>ANY> ]
-"115964117001" [label = <PARAM<BR/>p0> ]
-  "115964117001" -> "128849018888"  [ label = "DDG: p0"] 
-  "111669149704" -> "115964117001"  [ label = "DDG: "] 
-}

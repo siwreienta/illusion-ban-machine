@@ -16,6 +16,10 @@ components_manager:
       method: POST
       path: /load-code
       task_processor: main-task-processor
+    handler-get-all-codes:
+      method: GET
+      path: /get-all-codes
+      task_processor: main-task-processor
     handler-main-page:
       method: GET
       path: /

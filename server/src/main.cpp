@@ -28,5 +28,6 @@ int main(int argc, char *argv[]) {
     apotheosis::AppendLoadCodes(component_list);
     apotheosis::AppendMainPage(component_list);
     apotheosis::AppendLoadCodePage(component_list);
+    apotheosis::AppendManyCheck(component_list);
     return userver::utils::DaemonMain(argc, argv, component_list);
 }

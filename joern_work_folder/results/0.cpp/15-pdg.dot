@@ -1,8 +1,0 @@
-digraph "readInt" {  
-node [shape="rect"];  
-"111669149711" [label = <METHOD<BR/>readInt> ]
-"128849018895" [label = <METHOD_RETURN<BR/>ANY> ]
-"115964117013" [label = <PARAM<BR/>p0> ]
-  "115964117013" -> "128849018895"  [ label = "DDG: p0"] 
-  "111669149711" -> "115964117013"  [ label = "DDG: "] 
-}

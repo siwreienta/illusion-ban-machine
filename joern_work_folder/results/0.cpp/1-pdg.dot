@@ -1,13 +1,4 @@
 digraph "&lt;global&gt;" {  
 node [shape="rect"];  
-"111669149697" [label = <METHOD, 1<BR/>&lt;global&gt;> ]
-"128849018882" [label = <METHOD_RETURN, 1<BR/>ANY> ]
-"30064771164" [label = <&lt;operator&gt;.assignment, 8<BR/>cur_size = 0> ]
-"124554051584" [label = <METHOD_REF, 10<BR/>dfs<BR/>&lt;empty&gt;> ]
-"124554051585" [label = <METHOD_REF, 19<BR/>main<BR/>&lt;empty&gt;> ]
-  "30064771164" -> "128849018882"  [ label = "DDG: cur_size"] 
-  "30064771164" -> "128849018882"  [ label = "DDG: cur_size = 0"] 
-  "111669149697" -> "30064771164"  [ label = "DDG: "] 
-  "111669149697" -> "124554051584"  [ label = "DDG: "] 
-  "111669149697" -> "124554051585"  [ label = "DDG: "] 
+
 }

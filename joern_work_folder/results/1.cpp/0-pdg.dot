@@ -1,12 +1,4 @@
 digraph "&lt;global&gt;" {  
 node [shape="rect"];  
-"111669149696" [label = <METHOD, 1<BR/>&lt;global&gt;> ]
-"180388626432" [label = <TYPE_REF, 9<BR/>struct CreateQuery { int el_index, val; }> ]
-"180388626433" [label = <TYPE_REF, 13<BR/>struct GetQuery { int el_index, get_index; }> ]
-"124554051584" [label = <METHOD_REF, 22<BR/>dfs<BR/>&lt;empty&gt;> ]
-"124554051585" [label = <METHOD_REF, 37<BR/>main<BR/>&lt;empty&gt;> ]
-  "111669149696" -> "180388626432"  [ label = "DDG: "] 
-  "111669149696" -> "180388626433"  [ label = "DDG: "] 
-  "111669149696" -> "124554051584"  [ label = "DDG: "] 
-  "111669149696" -> "124554051585"  [ label = "DDG: "] 
+
 }
