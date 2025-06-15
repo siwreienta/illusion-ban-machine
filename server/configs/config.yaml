@@ -8,31 +8,22 @@ components_manager:
     dynamic-config:
       defaults:
         HTTP_CLIENT_CONNECTION_POOL_SIZE: 1000
-    handler-load-code:
-      method: GET,POST
+    handler-load-code-page:
+      method: GET
       path: /load-code
       task_processor: main-task-processor
-    handler-check-status:
-      method: GET,POST
-      path: /check-status
+    handler-load-code:
+      method: POST
+      path: /load-code
+      task_processor: main-task-processor
+    handler-get-all-codes:
+      method: GET
+      path: /get-all-codes
       task_processor: main-task-processor
     handler-main-page:
       method: GET
       path: /
       task_processor: main-task-processor
-    handler-hello:                    # Finally! Our handler.
-      path: /v1/hello               # Registering handler by URL '/v1/hello'.
-      method: GET                  # It will only reply to POST requests.
-      task_processor: main-task-processor  # Run it on CPU bound task processor
-
-    postgres-db-1:
-      dbconnection: $dbconnection
-      dbconnection#env: DB_CONNECTION
-      blocking_task_processor: fs-task-processor
-      dns_resolver: async
-      sync-start: true
-      connlimit_mode: manual
-
     handler-ping:
       method: GET
       path: /ping

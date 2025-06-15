@@ -26,6 +26,7 @@ std::vector<std::vector<long double>> check_all_in_dir(const std::string &dir_pa
             res[i][j] = gh.check(i, j);
         }
     }
+    return res;
 }
 
 long double
