@@ -6,11 +6,52 @@
 
 namespace apotheosis {
 
-long double check_two_graphs(const std::string &fpath_1, const std::string &fpath_2) {
+void GraphHandler::sort() {
+    std::sort(graphs.begin(), graphs.end());
+}
+
+std::vector<std::vector<long double>> check_all_in_dir(const std::string &dir_path) {
+    GraphHandler gh;
+    for (const auto &dir_entry :
+         std::filesystem::directory_iterator(dir_path)) {
+        if (dir_entry.is_regular_file() &&
+            dir_entry.path().extension() == ".dot") {
+            gh.read_graph(dir_entry.path());
+        }
+    }
+    gh.sort();
+    std::vector<std::vector<long double>> res(gh.size(), std::vector<long double>(gh.size(), 0));
+    for (int i = 0; i < gh.size(); i++) {
+        for (int j = i + 1; j < gh.size(); j++) {
+            res[i][j] = gh.check(i, j);
+        }
+    }
+}
+
+long double
+check_two_graphs(const std::string &fpath_1, const std::string &fpath_2) {
     GraphHandler gh;
     gh.read_graph(fpath_1);
     gh.read_graph(fpath_2);
     return gh.check(0, 1);
+}
+
+long double
+check_two_graphs_old(const std::string &fpath_1, const std::string &fpath_2) {
+    GraphHandler gh;
+    gh.read_graph(fpath_1);
+    gh.read_graph(fpath_2);
+    return gh.check_full(0, 1);
+}
+
+long double GraphHandler::check_full(int first_number, int second_number) {
+    graphs[first_number].devide_into_subgraphs_full();
+    graphs[second_number].devide_into_subgraphs_full();
+    long double res_1 =
+        VF2(graphs[first_number], graphs[second_number]).check();
+    long double res_2 =
+        VF2(graphs[second_number], graphs[first_number]).check();
+    return (res_1 + res_2) / 2;
 }
 
 long double GraphHandler::check(int first_number, int second_number) {

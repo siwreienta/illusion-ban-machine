@@ -17,7 +17,10 @@ public:
         return static_cast<int>(graphs.size());
     }
 
+    void sort();
+
     long double check(int first_number, int second_number);
+    long double check_full(int first_number, int second_number);
 };
 
 }  // namespace apotheosis
