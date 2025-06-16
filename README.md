@@ -24,8 +24,18 @@ Cервер умеет принимать запросы 4 типов:
 ![alt text].(media_for_readme/2025-06-16_22-29-13.png)
 
 
-## Руководство по эксплуатации
+## Документация
 ### Используемые библиотеки и технологии: 
 * Userver
 * PostgreSQL (pqxx), nlohmann/json
 * Joern, Docker
+
+### Для сборки и запуска проекта:
+- Только для сборки алгоритма в debug/release режиме:
+```
+bash ./scripts/build_algorithm_<MODE>.sh
+```
+- Для сборки сервера и запуска
+```
+bash ./scripts/build_and_run_server.sh
+```
