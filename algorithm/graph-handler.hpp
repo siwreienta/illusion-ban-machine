@@ -11,15 +11,16 @@ private:
     std::vector<Graph> graphs;
 
 public:
-    void privet();
-    static Graph read_graph(std::string &name, std::ifstream &is);
-    void add_graph(Graph graph);
+    void read_graph(std::string filepath);
 
     int size() {
         return static_cast<int>(graphs.size());
     }
 
+    void sort();
+
     long double check(int first_number, int second_number);
+    long double check_full(int first_number, int second_number);
 };
 
 }  // namespace apotheosis
