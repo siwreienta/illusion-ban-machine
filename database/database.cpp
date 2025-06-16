@@ -1,8 +1,14 @@
 #include "database.hpp"
 #include <iostream>
-#include <pqxx/pqxx>
 
 namespace apotheosis {
+
+database::database() 
+    : conn_("host=localhost dbname=apotheosis user=sofa password=w8uSZJZo") {
+    if (!conn_.is_open()) {
+        throw database_errors("База данных не открылась");
+    }
+}
 
 int database::add_user(const std::string &name, bool internal_use) {
     pqxx::work txn(conn_);
@@ -62,9 +68,11 @@ int database::add_task(int contest_number, int task_number, bool internal_use) {
     return id;
 }
 
-int database::load_code(const std::string &child_name, int task, int contest, const std::string &code) {
+int database::load_code(const std::string &child_name, int task, 
+                       const std::string &contest, const std::string &code) {
     int user_id = add_user(child_name, true);
-    int task_id = add_task(contest, task, true);
+    int task_id = add_task(0, task, true); // contest_number временно 0
+    
     pqxx::work txn(conn_);
     pqxx::result res = txn.exec_params(
         "INSERT INTO solutions(task_id, user_id, code) VALUES($1, $2, $3) RETURNING solution_id", 
@@ -96,7 +104,8 @@ int database::load_graph(int solution_id, const std::string &graph) {
     
     if (res.empty()) {
         txn.abort();
-        throw database_errors("Не вышло залить граф в базу данных для решения " + std::to_string(solution_id));
+        throw database_errors("Не вышло залить граф в базу данных для решения " + 
+                            std::to_string(solution_id));
     }
     
     int id = res[0][0].as<int>();
@@ -104,7 +113,7 @@ int database::load_graph(int solution_id, const std::string &graph) {
     return id;
 }
 
-const std::string database::get_graph(int graph_id) {
+std::string database::get_graph(int graph_id) {
     pqxx::read_transaction txn(conn_);
     pqxx::result res = txn.exec_params(
         "SELECT encode(graph, 'escape') FROM graphs WHERE graph_id = $1",
@@ -120,7 +129,7 @@ const std::string database::get_graph(int graph_id) {
     return graph;
 }
 
-const std::string database::get_solution(int solution_id) {
+std::string database::get_solution(int solution_id) {
     pqxx::read_transaction txn(conn_);
     pqxx::result res = txn.exec_params(
         "SELECT encode(code, 'escape') FROM solutions WHERE solution_id = $1",
@@ -136,4 +145,30 @@ const std::string database::get_solution(int solution_id) {
     return solution;
 }
 
-}  // namespace apotheosis
+bool database::user_exists(const std::string &name) {
+    pqxx::work txn(conn_);
+    pqxx::result res = txn.exec_params(
+        "SELECT 1 FROM users WHERE name = $1 LIMIT 1", name);
+    txn.commit();
+    return !res.empty();
+}
+
+void database::delete_user(int user_id) {
+    pqxx::work txn(conn_);
+    txn.exec_params("DELETE FROM users WHERE user_id = $1", user_id);
+    txn.commit();
+}
+
+pqxx::result database::get_user_solutions(const std::string &user_name) {
+    pqxx::work txn(conn_);
+    pqxx::result res = txn.exec_params(
+        "SELECT s.solution_id, t.contest_number, t.task_number, s.code "
+        "FROM solutions s "
+        "JOIN users u ON s.user_id = u.user_id "
+        "JOIN tasks t ON s.task_id = t.task_id "
+        "WHERE u.name = $1", user_name);
+    txn.commit();
+    return res;
+}
+
+} // namespace apotheosis
