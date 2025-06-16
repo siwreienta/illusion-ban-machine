@@ -1,17 +1,30 @@
 #include "input-parcer.hpp"
-// #include "../database/database.hpp"
 #include <algorithm>
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <map>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
 #include <vector>
 
 namespace graph_maker {
+
+void files_stack::parse_filename(const std::string& filename, 
+                               int& contest_num, 
+                               int& task_num, 
+                               int& child_id) const {
+    std::string base_name = std::filesystem::path(filename).stem().string();
+    std::replace(base_name.begin(), base_name.end(), '_', ' ');
+    std::istringstream iss(base_name);
+        
+    if (!(iss >> contest_num >> task_num >> child_id)) {
+        throw parcerer_errors("Invalid filename format: " + filename);
+    }
+}
 
 files_stack::files_stack(const std::string &folder_name)
     : folder_(folder_name) {
@@ -44,12 +57,50 @@ const std::string &files_stack::get_file_path(int number) {
     }
 }
 
-void joern_graph_maker::create_dot_file(
-    const std::string &file,
+void joern_graph_maker::save_graph_to_db(const std::string& dot_file_path, 
+                                       int contest_num, 
+                                       int task_num, 
+                                       int child_id) {
+    std::ifstream dot_file(dot_file_path);
+    if (!dot_file.is_open()) {
+        throw parcerer_errors("Cannot open .dot file: " + dot_file_path);
+    }
+    
+    std::string graph_content(
+        (std::istreambuf_iterator<char>(dot_file)),
+        std::istreambuf_iterator<char>()
+    );
+    dot_file.close();
+    
+    pqxx::work txn(db_.get_connection());
+    pqxx::result res = txn.exec_params(
+        "SELECT s.solution_id FROM solutions s "
+        "JOIN users u ON s.user_id = u.user_id "
+        "JOIN tasks t ON s.task_id = t.task_id "
+        "WHERE u.name = $1 AND t.contest_number = $2 AND t.task_number = $3",
+        "child_" + std::to_string(child_id),
+        contest_num,
+        task_num
+    );
+    
+    if (res.empty()) {
+        throw parcerer_errors("Solution not found in DB for child: " + 
+                            std::to_string(child_id));
+    }
+    
+    int solution_id = res[0][0].as<int>();
+    
+    db_.load_graph(solution_id, graph_content);
+    
+}
 
-    const std::string &id
-) {
+void joern_graph_maker::create_dot_file(const std::string &file, const std::string &id) {
     std::filesystem::path path_to_file(file);
+    
+    int contest_num, task_num, child_id;
+    files_stack stack("");
+    stack.parse_filename(path_to_file.filename().string(), contest_num, task_num, child_id);
+    
     std::string command =
         "joern-export --repr=pdg --format=dot --out "
         "../joern_work_folder/results/" +
@@ -58,10 +109,14 @@ void joern_graph_maker::create_dot_file(
     if (result != 0) {
         throw parcerer_errors("Ошибка при создании .dot для файла: " + file);
     }
+    
     const std::string path_to_dot_folder = "../joern_work_folder/results/" + id;
     const std::string path_to_customized_file =
         "../joern_work_folder/results/" + id + "/output.dot";
+    
     customize_graph(path_to_dot_folder, path_to_customized_file);
+    
+    save_graph_to_db(path_to_customized_file, contest_num, task_num, child_id);
 }
 
 void joern_graph_maker::customize_graph(
